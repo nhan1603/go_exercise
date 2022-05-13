@@ -1,0 +1,6 @@
+type Query {
+    """
+    Get list of products
+    """
+    getProducts: [Product!]!
+}

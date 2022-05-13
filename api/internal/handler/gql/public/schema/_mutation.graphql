@@ -1,0 +1,11 @@
+type Mutation {
+    """
+    Create a product
+    """
+    createProduct(input:CreateProductInput!): Product!
+
+    """
+    Update a product
+    """
+    updateProduct(externalId: String!, input:UpdateProductInput!): Product!
+}

@@ -1,0 +1,28 @@
+enum ProductStatus {
+    ACTIVE
+    INACTIVE
+}
+
+type Product {
+    externalId: String!
+    name: String!
+    description: String!
+    status: ProductStatus!
+    price: Int64!
+    createdAt: Time!
+    updatedAt: Time!
+}
+
+input CreateProductInput {
+    name: String!
+    description: String!
+    status: ProductStatus!
+    price: Int64!
+}
+
+input UpdateProductInput {
+    name: String!
+    description: String!
+    status: ProductStatus!
+    price: Int64!
+}
