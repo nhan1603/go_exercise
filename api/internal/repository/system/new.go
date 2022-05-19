@@ -15,6 +15,7 @@ type Repository interface {
 	FindFriendList(ctx context.Context, email string) ([]string, error)
 	FindCommonFriends(ctx context.Context, email1, email2 string) ([]string, error)
 	Subscribe(ctx context.Context, email1, email2 string) error
+	Block(ctx context.Context, email1, email2 string) error
 }
 
 // New returns an implementation instance satisfying Repository

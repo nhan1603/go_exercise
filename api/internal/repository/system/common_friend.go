@@ -23,12 +23,12 @@ func (i impl) FindFriendList(ctx context.Context, email string) ([]string, error
 
 	query := fmt.Sprintf(
 		`select %s from "relationship" rela left join "user" usr on usr."id" = rela."second_email_id" 
-				where rela."first_email_id"=$1`, sel,
+				where rela."first_email_id"=$1 and rela."status" = $2`, sel,
 	)
 
 	var result []string
 
-	rows, errs := i.dbConn.Query(query, usrId)
+	rows, errs := i.dbConn.Query(query, usrId, FRIEND)
 
 	if errs != nil {
 		if errors.Cause(errs) == sql.ErrNoRows {

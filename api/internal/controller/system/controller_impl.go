@@ -26,3 +26,8 @@ func (i impl) FindCommonFriends(ctx context.Context, email1, email2 string) ([]s
 func (i impl) Subscribe(ctx context.Context, email1, email2 string) error {
 	return i.repo.System().Subscribe(ctx, email1, email2)
 }
+
+// Subscribe will create a subscription for of the second email for the first email
+func (i impl) Block(ctx context.Context, email1, email2 string) error {
+	return i.repo.System().Block(ctx, email1, email2)
+}

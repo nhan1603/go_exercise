@@ -8,13 +8,8 @@ import (
 	"net/http"
 )
 
-type reqStructDTO struct {
-	Requestor string `json:"requestor"`
-	Target    string `json:"target"`
-}
-
-// Subscribe creates a subscription between two emails
-func (h Handler) Subscribe() http.HandlerFunc {
+// Block creates a block relationship between two emails
+func (h Handler) Block() http.HandlerFunc {
 	return httpserv.ErrHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		decoder := json.NewDecoder(r.Body)
 		var req reqStructDTO
@@ -24,7 +19,7 @@ func (h Handler) Subscribe() http.HandlerFunc {
 			panic(err)
 		}
 
-		errAdd := h.systemCtrl.Subscribe(r.Context(), req.Requestor, req.Target)
+		errAdd := h.systemCtrl.Block(r.Context(), req.Requestor, req.Target)
 
 		if errors.Is(errAdd, context.Canceled) {
 			return nil
