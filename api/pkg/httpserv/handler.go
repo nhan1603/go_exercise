@@ -24,6 +24,8 @@ func Handler(
 	r.Get("/_/ready", readiness)
 	r.Get("/_/live", liveness)
 
+	r.Post("/_/add-friend", addfriend)
+
 	r.Post("/_/create-user", createuser)
 
 	r.Group(routerFunc)
