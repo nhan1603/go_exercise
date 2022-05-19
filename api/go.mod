@@ -7,6 +7,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.1.3
 	github.com/friendsofgo/errors v0.9.2
 	github.com/go-chi/chi/v5 v5.0.7
+	github.com/juliangruber/go-intersect v1.1.0
 	github.com/lib/pq v1.2.1-0.20191011153232-f91d3411e481
 	github.com/pkg/errors v0.8.1
 	github.com/sony/sonyflake v1.0.0

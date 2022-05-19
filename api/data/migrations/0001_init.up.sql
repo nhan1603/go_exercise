@@ -33,3 +33,17 @@ CREATE TABLE IF NOT EXISTS public.order_item
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
     );
 CREATE UNIQUE INDEX IF NOT EXISTS order_item_uidx_order_id_product_id ON public.order_item (order_id, product_id);
+
+CREATE TABLE IF NOT EXISTS public.user
+(
+    id          SERIAL PRIMARY KEY,
+    email       TEXT                     NOT NULL CHECK (email <> ''::text)
+    );
+
+CREATE TABLE IF NOT EXISTS public.relationship
+(
+    id              SERIAL PRIMARY KEY,
+    first_email_id  INT NOT NULL CHECK (first_email_id <> second_email_id),
+    second_email_id INT NOT NULL,
+    status          INT NOT NULL DEFAULT 0
+    );

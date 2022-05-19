@@ -8,7 +8,7 @@ import (
 )
 
 func Handler(
-	readiness, liveness http.HandlerFunc,
+	readiness, liveness, addfriend, createuser, getfriendlist, getcommonfriend, subscribe http.HandlerFunc,
 	routerFunc func(chi.Router)) http.Handler {
 	r := chi.NewRouter()
 	// TODO: add middleware here
@@ -22,6 +22,16 @@ func Handler(
 
 	r.Get("/_/ready", readiness)
 	r.Get("/_/live", liveness)
+
+	r.Post("/_/add-friend", addfriend)
+
+	r.Post("/_/create-user", createuser)
+
+	r.Post("/_/friend-list", getfriendlist)
+
+	r.Post("/_/common-friend", getcommonfriend)
+
+	r.Post("/_/subscribe", subscribe)
 
 	r.Group(routerFunc)
 
