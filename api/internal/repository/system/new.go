@@ -10,6 +10,7 @@ import (
 type Repository interface {
 	// CheckDB will check if calls to DB are successful or not
 	CheckDB(context.Context) error
+	CreateUser(ctx context.Context, email string) error
 }
 
 // New returns an implementation instance satisfying Repository

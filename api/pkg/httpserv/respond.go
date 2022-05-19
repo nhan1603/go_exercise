@@ -3,6 +3,7 @@ package httpserv
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -13,6 +14,12 @@ type Success struct {
 
 type CustomResponse struct {
 	Success bool `json:"success"`
+}
+
+type FriendListResponse struct {
+	Success bool     `json:"success"`
+	Friends []string `json:"friends"`
+	Count   int      `json:"count"`
 }
 
 // RespondJSON handles conversion of the requested result to JSON format
@@ -43,6 +50,7 @@ func RespondJSONWithHeaders(ctx context.Context, w http.ResponseWriter, obj inte
 		}
 		respBytes, err = json.Marshal(parsed)
 	case error:
+		fmt.Println(obj)
 		status = http.StatusInternalServerError
 		respBytes, err = json.Marshal(ErrDefaultInternal)
 	default:
