@@ -13,6 +13,7 @@ type Controller interface {
 	AddFriend(ctx context.Context, email1, email2 string) error
 	CreateUser(ctx context.Context, email string) error
 	FindFriendList(ctx context.Context, email string) ([]string, error)
+	FindCommonFriends(ctx context.Context, email1, email2 string) ([]string, error)
 }
 
 // New initializes a new Controller instance and returns it

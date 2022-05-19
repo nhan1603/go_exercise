@@ -30,6 +30,8 @@ func Handler(
 
 	r.Post("/_/friend-list", getfriendlist)
 
+	r.Post("/_/common-friend", getcommonfriend)
+
 	r.Group(routerFunc)
 
 	return r
