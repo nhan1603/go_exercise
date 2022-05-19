@@ -30,6 +30,7 @@ func (rtr Router) Handler() http.Handler {
 		rtr.healthRESTHandler.CreateUser(),
 		rtr.healthRESTHandler.FindFriendList(),
 		rtr.healthRESTHandler.FindCommonFriend(),
+		rtr.healthRESTHandler.Subscribe(),
 		rtr.routes)
 }
 
