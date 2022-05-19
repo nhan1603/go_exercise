@@ -10,7 +10,9 @@ import (
 type Repository interface {
 	// CheckDB will check if calls to DB are successful or not
 	CheckDB(context.Context) error
+	AddFriend(ctx context.Context, email1, email2 string) error
 	CreateUser(ctx context.Context, email string) error
+	FindFriendList(ctx context.Context, email string) ([]string, error)
 }
 
 // New returns an implementation instance satisfying Repository

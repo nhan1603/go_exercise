@@ -28,6 +28,8 @@ func Handler(
 
 	r.Post("/_/create-user", createuser)
 
+	r.Post("/_/friend-list", getfriendlist)
+
 	r.Group(routerFunc)
 
 	return r

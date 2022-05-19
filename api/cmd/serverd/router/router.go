@@ -28,6 +28,7 @@ func (rtr Router) Handler() http.Handler {
 		rtr.healthRESTHandler.Liveness(),
 		rtr.healthRESTHandler.AddFriend(),
 		rtr.healthRESTHandler.CreateUser(),
+		rtr.healthRESTHandler.FindFriendList(),
 		rtr.routes)
 }
 
