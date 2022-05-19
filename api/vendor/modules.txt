@@ -49,6 +49,9 @@ github.com/gorilla/websocket
 ## explicit; go 1.12
 github.com/hashicorp/golang-lru
 github.com/hashicorp/golang-lru/simplelru
+# github.com/juliangruber/go-intersect v1.1.0
+## explicit; go 1.14
+github.com/juliangruber/go-intersect
 # github.com/lib/pq v1.2.1-0.20191011153232-f91d3411e481
 ## explicit
 github.com/lib/pq
