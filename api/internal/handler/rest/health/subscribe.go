@@ -1,14 +1,13 @@
 package health
 
 import (
-	"context"
 	"encoding/json"
-	"errors"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
 
-type reqStructDTO struct {
+// SubscribeInput struct for parsing body from request for subscribe
+type SubscribeInput struct {
 	Requestor string `json:"requestor"`
 	Target    string `json:"target"`
 }
@@ -17,23 +16,20 @@ type reqStructDTO struct {
 func (h Handler) Subscribe() http.HandlerFunc {
 	return httpserv.ErrHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		decoder := json.NewDecoder(r.Body)
-		var req reqStructDTO
+		var req SubscribeInput
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			panic(err)
+			// return bad request
+			return err
 		}
 
-		errAdd := h.systemCtrl.Subscribe(r.Context(), req.Requestor, req.Target)
-
-		if errors.Is(errAdd, context.Canceled) {
-			return nil
+		if err = h.systemCtrl.Subscribe(r.Context(), req.Requestor, req.Target); err != nil {
+			return err
 		}
 
-		if errAdd == nil {
-			httpserv.RespondJSON(r.Context(), w, httpserv.CustomResponse{Success: true})
-		}
+		httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
 
-		return errAdd
+		return nil
 	})
 }

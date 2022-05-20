@@ -12,7 +12,7 @@ type Success struct {
 	Message string `json:"message,omitempty"`
 }
 
-type CustomResponse struct {
+type Response struct {
 	Success bool `json:"success"`
 }
 

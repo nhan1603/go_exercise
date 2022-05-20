@@ -30,7 +30,7 @@ func (h Handler) CreateUser() http.HandlerFunc {
 		}
 
 		if errAdd == nil {
-			httpserv.RespondJSON(r.Context(), w, httpserv.CustomResponse{Success: true})
+			httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
 		}
 
 		return errAdd

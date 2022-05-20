@@ -19,11 +19,12 @@ func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) er
 	sel := "*"
 
 	query := fmt.Sprintf(
-		"select %s from \"relationship\" where \"first_email_id\"=$1 and \"second_email_id\" = $2 and (\"status\" = $3 "+
-			"or \"status\" = $4)", sel,
+		`select %s from "relationship" where 
+			(("first_email_id"=$1 and "second_email_id" = $2) OR ("first_email_id"=$3 and "second_email_id" = $4))
+			AND ("status" = $5 OR "status" = $6)`, sel,
 	)
 
-	q := queries.Raw(query, emailId1, emailId2, FRIEND, BLOCK)
+	q := queries.Raw(query, emailId1, emailId2, emailId2, emailId1, FRIEND, BLOCK)
 
 	err := q.Bind(ctx, i.dbConn, relaObj)
 	if err != nil {

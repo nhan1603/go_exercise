@@ -1,7 +1,6 @@
 package health
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	pkgerrors "github.com/pkg/errors"
@@ -29,12 +28,12 @@ func (h Handler) AddFriend() http.HandlerFunc {
 
 		errAdd := h.systemCtrl.AddFriend(r.Context(), req.Friends[0], req.Friends[1])
 
-		if errors.Is(errAdd, context.Canceled) {
-			return nil
+		if errAdd != nil {
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errAdd.Error()}
 		}
 
 		if errAdd == nil {
-			httpserv.RespondJSON(r.Context(), w, httpserv.CustomResponse{Success: true})
+			httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
 		}
 
 		return errAdd

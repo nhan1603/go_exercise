@@ -12,7 +12,7 @@ import (
 func (h Handler) Block() http.HandlerFunc {
 	return httpserv.ErrHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		decoder := json.NewDecoder(r.Body)
-		var req reqStructDTO
+		var req SubscribeInput
 
 		err := decoder.Decode(&req)
 		if err != nil {
@@ -26,7 +26,7 @@ func (h Handler) Block() http.HandlerFunc {
 		}
 
 		if errAdd == nil {
-			httpserv.RespondJSON(r.Context(), w, httpserv.CustomResponse{Success: true})
+			httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
 		}
 
 		return errAdd
