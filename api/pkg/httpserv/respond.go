@@ -22,6 +22,11 @@ type FriendListResponse struct {
 	Count   int      `json:"count"`
 }
 
+type UpdateReceiveResponse struct {
+	Success    bool     `json:"success"`
+	Recipients []string `json:"recipients"`
+}
+
 // RespondJSON handles conversion of the requested result to JSON format
 func RespondJSON(ctx context.Context, w http.ResponseWriter, obj interface{}) {
 	RespondJSONWithHeaders(ctx, w, obj, nil)

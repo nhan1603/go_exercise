@@ -16,6 +16,7 @@ type Controller interface {
 	FindCommonFriends(ctx context.Context, email1, email2 string) ([]string, error)
 	Subscribe(ctx context.Context, email1, email2 string) error
 	Block(ctx context.Context, email1, email2 string) error
+	UpdateReceiver(ctx context.Context, email, message string) ([]string, error)
 }
 
 // New initializes a new Controller instance and returns it

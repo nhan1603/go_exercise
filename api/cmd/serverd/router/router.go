@@ -32,6 +32,7 @@ func (rtr Router) Handler() http.Handler {
 		rtr.healthRESTHandler.FindCommonFriend(),
 		rtr.healthRESTHandler.Subscribe(),
 		rtr.healthRESTHandler.Block(),
+		rtr.healthRESTHandler.UpdateReceiver(),
 		rtr.routes)
 }
 

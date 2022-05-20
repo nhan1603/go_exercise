@@ -27,7 +27,12 @@ func (i impl) Subscribe(ctx context.Context, email1, email2 string) error {
 	return i.repo.System().Subscribe(ctx, email1, email2)
 }
 
-// Subscribe will create a subscription for of the second email for the first email
+// Block creates a block relation between email1 and email2
 func (i impl) Block(ctx context.Context, email1, email2 string) error {
 	return i.repo.System().Block(ctx, email1, email2)
+}
+
+// UpdateReceiver returns a list of emails that will receive message from certain user
+func (i impl) UpdateReceiver(ctx context.Context, email, message string) ([]string, error) {
+	return i.repo.System().UpdateReceiver(ctx, email, message)
 }
