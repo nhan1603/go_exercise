@@ -37,12 +37,14 @@ func (i impl) UpdateReceiver(ctx context.Context, email, message string) ([]stri
 		`SELECT DISTINCT %s FROM "relationship" rela RIGHT JOIN "user" usr ON usr."id" = rela."first_email_id" 
 				WHERE (rela."second_email_id" = $1 and rela."status" != $2) 
 				OR (usr."email" = any($3)
-				AND (rela."first_email_id" IS NULL OR rela."second_email_id"!= $4 ))`, sel,
+				AND (rela."first_email_id" IS NULL 
+				OR usr."id" NOT IN (SELECT first_email_id from "relationship" WHERE
+                        second_email_id = $4 and status = $5)))`, sel,
 	)
 
 	var result []string
 
-	rows, errs := i.dbConn.Query(query, emailId, BLOCK, pq.Array(emailList), emailId)
+	rows, errs := i.dbConn.Query(query, emailId, BLOCK, pq.Array(emailList), emailId, BLOCK)
 
 	if errs != nil {
 		if errors.Cause(errs) == sql.ErrNoRows {
