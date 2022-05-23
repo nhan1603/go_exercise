@@ -1,9 +1,7 @@
 package health
 
 import (
-	"context"
 	"encoding/json"
-	"errors"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
@@ -23,16 +21,16 @@ func (h Handler) CreateUser() http.HandlerFunc {
 			panic(err)
 		}
 
-		errAdd := h.systemCtrl.CreateUser(r.Context(), req.Email)
+		errCreate := h.systemCtrl.CreateUser(r.Context(), req.Email)
 
-		if errors.Is(errAdd, context.Canceled) {
-			return nil
+		if errCreate != nil {
+			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errCreate.Error()}
 		}
 
-		if errAdd == nil {
+		if errCreate == nil {
 			httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
 		}
 
-		return errAdd
+		return errCreate
 	})
 }

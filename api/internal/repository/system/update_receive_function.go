@@ -18,6 +18,11 @@ func (i impl) UpdateReceiver(ctx context.Context, email, message string) ([]stri
 	var emailList []string
 
 	for _, word := range words {
+
+		if word[0:1] == "@" {
+			word = word[1:]
+		}
+
 		if strings.Contains(word, "@") {
 			emailList = append(emailList, word)
 		}

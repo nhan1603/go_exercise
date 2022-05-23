@@ -1,9 +1,7 @@
 package health
 
 import (
-	"context"
 	"encoding/json"
-	"errors"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
@@ -26,15 +24,13 @@ func (h Handler) UpdateReceiver() http.HandlerFunc {
 
 		listReceiver, errFind := h.systemCtrl.UpdateReceiver(r.Context(), req.Sender, req.Text)
 
-		if errors.Is(errFind, context.Canceled) {
-			return nil
-		}
-
 		if errFind == nil {
 			httpserv.RespondJSON(r.Context(), w, httpserv.UpdateReceiveResponse{
 				Success:    true,
 				Recipients: listReceiver,
 			})
+		} else {
+			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errFind.Error()}
 		}
 
 		return errFind

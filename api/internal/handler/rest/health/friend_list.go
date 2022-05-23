@@ -1,7 +1,6 @@
 package health
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	pkgerrors "github.com/pkg/errors"
@@ -22,16 +21,14 @@ func (h Handler) FindFriendList() http.HandlerFunc {
 
 		listFriend, errFind := h.systemCtrl.FindFriendList(r.Context(), req.Email)
 
-		if errors.Is(errFind, context.Canceled) {
-			return nil
-		}
-
 		if errFind == nil {
 			httpserv.RespondJSON(r.Context(), w, httpserv.FriendListResponse{
 				Success: true,
 				Friends: listFriend,
 				Count:   len(listFriend),
 			})
+		} else {
+			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errFind.Error()}
 		}
 
 		return errFind
@@ -54,8 +51,8 @@ func (h Handler) FindCommonFriend() http.HandlerFunc {
 
 		commonFriend, errFind := h.systemCtrl.FindCommonFriends(r.Context(), req.Friends[0], req.Friends[1])
 
-		if errors.Is(errFind, context.Canceled) {
-			return nil
+		if errFind != nil {
+			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errFind.Error()}
 		}
 
 		if errFind == nil {

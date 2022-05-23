@@ -1,9 +1,7 @@
 package health
 
 import (
-	"context"
 	"encoding/json"
-	"errors"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
@@ -19,16 +17,16 @@ func (h Handler) Block() http.HandlerFunc {
 			panic(err)
 		}
 
-		errAdd := h.systemCtrl.Block(r.Context(), req.Requestor, req.Target)
+		errBlock := h.systemCtrl.Block(r.Context(), req.Requestor, req.Target)
 
-		if errors.Is(errAdd, context.Canceled) {
-			return nil
+		if errBlock != nil {
+			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errBlock.Error()}
 		}
 
-		if errAdd == nil {
+		if errBlock == nil {
 			httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
 		}
 
-		return errAdd
+		return errBlock
 	})
 }
