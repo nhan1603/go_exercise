@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+	"gobase/api/internal/repository/orm"
 
 	"gobase/api/pkg/db/pg"
 )
@@ -10,13 +11,16 @@ import (
 type Repository interface {
 	// CheckDB will check if calls to DB are successful or not
 	CheckDB(context.Context) error
-	AddFriend(ctx context.Context, email1, email2 string) error
-	CreateUser(ctx context.Context, email string) error
-	FindFriendList(ctx context.Context, email string) ([]string, error)
-	FindCommonFriends(ctx context.Context, email1, email2 string) ([]string, error)
-	Subscribe(ctx context.Context, email1, email2 string) error
-	Block(ctx context.Context, email1, email2 string) error
-	UpdateReceiver(ctx context.Context, email, message string) ([]string, error)
+	FindUserByEmail(context.Context, string) (*orm.User, error)
+	CheckExistedFriend(context.Context, int, int) error
+	AddFriend(context.Context, int, int) error
+	CreateUser(context.Context, string) (int, error)
+	FindFriendList(context.Context, int) ([]string, error)
+	CheckExistedSubscribe(context.Context, int, int) error
+	Subscribe(context.Context, int, int) error
+	CheckExistedBlock(context.Context, int, int) error
+	Block(context.Context, int, int) error
+	UpdateReceiver(context.Context, int, []string) ([]string, error)
 }
 
 // New returns an implementation instance satisfying Repository

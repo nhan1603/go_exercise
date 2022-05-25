@@ -4,20 +4,11 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/juliangruber/go-intersect"
 	"github.com/pkg/errors"
-	"gobase/api/pkg/utils"
 )
 
 // FindFriendList will find the list of email that is friend with the provided user
-func (i impl) FindFriendList(ctx context.Context, email string) ([]string, error) {
-
-	user1, err1 := i.findUserByEmail(ctx, email)
-	if err1 != nil {
-		return nil, err1
-	}
-
-	usrId := user1.ID
+func (i impl) FindFriendList(ctx context.Context, usrId int) ([]string, error) {
 
 	sel := "usr.\"email\""
 
@@ -49,23 +40,4 @@ func (i impl) FindFriendList(ctx context.Context, email string) ([]string, error
 	}
 
 	return result, nil
-}
-
-// FindCommonFriends will find the list of email that is common friend with the provided users
-func (i impl) FindCommonFriends(ctx context.Context, email1, email2 string) ([]string, error) {
-	listFriend1, err1 := i.FindFriendList(ctx, email1)
-
-	listFriend2, err2 := i.FindFriendList(ctx, email2)
-
-	if err := utils.MergeErr(err1, err2); err != nil {
-		return nil, err
-	}
-
-	listCommonFr := intersect.Hash(listFriend1, listFriend2)
-
-	listResult := make([]string, len(listCommonFr))
-	for ind, val := range listCommonFr {
-		listResult[ind] = fmt.Sprint(val)
-	}
-	return listResult, nil
 }

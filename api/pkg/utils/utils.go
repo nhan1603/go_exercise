@@ -2,7 +2,7 @@ package utils
 
 import (
 	"database/sql"
-	"github.com/pkg/errors"
+	"github.com/friendsofgo/errors"
 )
 
 func MergeErr(errs ...error) error {

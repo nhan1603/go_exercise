@@ -5,14 +5,14 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/friendsofgo/errors"
+	pkgerrors "github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries"
 	"gobase/api/internal/repository/orm"
-	"gobase/api/pkg/utils"
 )
 
-// findUserByEmail will find the user entity with the corresponding email
-func (i impl) findUserByEmail(ctx context.Context, email string) (*orm.User, error) {
+// FindUserByEmail will find the user entity with the corresponding email
+func (i impl) FindUserByEmail(ctx context.Context, email string) (*orm.User, error) {
 
 	userObj := &orm.User{}
 
@@ -36,19 +36,10 @@ func (i impl) findUserByEmail(ctx context.Context, email string) (*orm.User, err
 }
 
 // CreateUser creates a new user entity with the corresponding email
-func (i impl) CreateUser(ctx context.Context, email string) error {
-
-	_, checkError := i.findUserByEmail(ctx, email)
-
-	if checkError == nil {
-		return errors.New("Existed email input")
-	}
-
+func (i impl) CreateUser(ctx context.Context, email string) (int, error) {
 	userEntity := orm.User{
 		Email: email,
 	}
 
-	fmt.Println(userEntity)
-	errInsert := userEntity.Insert(ctx, i.dbConn, boil.Infer())
-	return utils.MergeErrDB(errInsert)
+	return userEntity.ID, pkgerrors.WithStack(userEntity.Insert(ctx, i.dbConn, boil.Infer()))
 }

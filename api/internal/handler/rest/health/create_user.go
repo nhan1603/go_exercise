@@ -21,7 +21,7 @@ func (h Handler) CreateUser() http.HandlerFunc {
 			panic(err)
 		}
 
-		errCreate := h.systemCtrl.CreateUser(r.Context(), req.Email)
+		_, errCreate := h.systemCtrl.CreateUser(r.Context(), req.Email)
 
 		if errCreate != nil {
 			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errCreate.Error()}

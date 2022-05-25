@@ -37,32 +37,11 @@ func (i impl) CheckExistedSubscribe(ctx context.Context, emailId1, emailId2 int)
 }
 
 // Subscribe will create a subscription for two email
-func (i impl) Subscribe(ctx context.Context, email1, email2 string) error {
-
-	if email1 == email2 {
-		return errors.New("Duplicate email input")
-	}
-
-	user1, err1 := i.findUserByEmail(ctx, email1)
-	if err1 != nil {
-		return err1
-	}
-
-	user2, err2 := i.findUserByEmail(ctx, email2)
-	if err2 != nil {
-		return err2
-	}
-
-	emailId1 := user1.ID
-	emailId2 := user2.ID
-
-	if err := i.CheckExistedSubscribe(ctx, emailId1, emailId2); err != nil {
-		return err
-	}
+func (i impl) Subscribe(ctx context.Context, email1, email2 int) error {
 
 	relaSubscribe := orm.Relationship{
-		FirstEmailID:  emailId1,
-		SecondEmailID: emailId2,
+		FirstEmailID:  email1,
+		SecondEmailID: email2,
 		Status:        SUBSCRIBE,
 	}
 

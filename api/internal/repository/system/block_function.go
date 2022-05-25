@@ -36,28 +36,7 @@ func (i impl) CheckExistedBlock(ctx context.Context, emailId1, emailId2 int) err
 }
 
 // Block creates a block-relationship from the first email
-func (i impl) Block(ctx context.Context, email1, email2 string) error {
-
-	if email1 == email2 {
-		return errors.New("Duplicate email input")
-	}
-
-	user1, err1 := i.findUserByEmail(ctx, email1)
-	if err1 != nil {
-		return err1
-	}
-
-	user2, err2 := i.findUserByEmail(ctx, email2)
-	if err2 != nil {
-		return err2
-	}
-
-	emailId1 := user1.ID
-	emailId2 := user2.ID
-
-	if err := i.CheckExistedBlock(ctx, emailId1, emailId2); err != nil {
-		return err
-	}
+func (i impl) Block(ctx context.Context, emailId1, emailId2 int) error {
 
 	// Delete all other relationship
 	deleteQuery := "DELETE from \"relationship\" where \"first_email_id\"=$1 and \"second_email_id\" = $2"

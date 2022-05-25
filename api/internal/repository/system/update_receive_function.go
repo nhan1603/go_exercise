@@ -6,34 +6,10 @@ import (
 	"fmt"
 	"github.com/lib/pq"
 	"github.com/pkg/errors"
-	"strings"
 )
 
 // UpdateReceiver list all the emails that receive update from source email
-func (i impl) UpdateReceiver(ctx context.Context, email, message string) ([]string, error) {
-
-	// find users mentioned in the update
-	words := strings.Fields(message)
-
-	var emailList []string
-
-	for _, word := range words {
-
-		if word[0:1] == "@" {
-			word = word[1:]
-		}
-
-		if strings.Contains(word, "@") {
-			emailList = append(emailList, word)
-		}
-	}
-
-	user, err := i.findUserByEmail(ctx, email)
-	if err != nil {
-		return nil, err
-	}
-
-	emailId := user.ID
+func (i impl) UpdateReceiver(ctx context.Context, emailId int, emailList []string) ([]string, error) {
 
 	// find users that can receive update from sender
 	sel := "usr.\"email\""
@@ -44,7 +20,7 @@ func (i impl) UpdateReceiver(ctx context.Context, email, message string) ([]stri
 				OR (usr."email" = any($3)
 				AND (rela."first_email_id" IS NULL 
 				OR usr."id" NOT IN (SELECT first_email_id from "relationship" WHERE
-                        second_email_id = $4 and status = $5)))`, sel,
+				second_email_id = $4 and status = $5)))`, sel,
 	)
 
 	var result []string

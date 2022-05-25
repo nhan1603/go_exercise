@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+	"os"
 	"testing"
 
 	pkgerrors "github.com/pkg/errors"
@@ -11,6 +12,7 @@ import (
 )
 
 func TestImpl_CheckDB(t *testing.T) {
+	os.Setenv("DB_URL", "postgres://gobase:@localhost:5432/gobase?sslmode=disable")
 	cancelledCtx, c := context.WithCancel(context.Background())
 	c()
 	type arg struct {
