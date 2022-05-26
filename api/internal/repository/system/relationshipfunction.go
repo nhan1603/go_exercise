@@ -3,10 +3,10 @@ package system
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/friendsofgo/errors"
+	pkgerrors "github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
-	"github.com/volatiletech/sqlboiler/v4/queries"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"gobase/api/internal/repository/orm"
 	"gobase/api/pkg/utils"
 )
@@ -14,25 +14,16 @@ import (
 // CheckExistedFriend will check a relationship between two emails has already existed or not
 func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) error {
 
-	relaObj := &orm.Relationship{}
+	_, err := orm.Relationships(qm.Expr(
+		qm.Expr(qm.Where("first_email_id=?", emailId1), qm.And("second_email_id = ?", emailId2)),
+		qm.Or2(qm.Expr(qm.Where("first_email_id=?", emailId2), qm.And("second_email_id = ?", emailId1)))),
+		qm.Expr(qm.Where("status=?", FRIEND), qm.Or("status=?", BLOCK))).One(ctx, i.dbConn)
 
-	sel := "*"
-
-	query := fmt.Sprintf(
-		`select %s from "relationship" where 
-			(("first_email_id"=$1 and "second_email_id" = $2) OR ("first_email_id"=$3 and "second_email_id" = $4))
-			AND ("status" = $5 OR "status" = $6)`, sel,
-	)
-
-	q := queries.Raw(query, emailId1, emailId2, emailId2, emailId1, FRIEND, BLOCK)
-
-	err := q.Bind(ctx, i.dbConn, relaObj)
 	if err != nil {
 		if errors.Cause(err) == sql.ErrNoRows {
 			return nil
 		}
-
-		return errors.Wrap(err, "orm: unable to select from user")
+		return pkgerrors.WithStack(err)
 	}
 
 	return errors.New("Cannot create new friendship.")
@@ -40,7 +31,6 @@ func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) er
 
 // AddFriend will create a relationship entity for two email
 func (i impl) AddFriend(ctx context.Context, emailId1, emailId2 int) error {
-
 	relaFriend1 := orm.Relationship{
 		FirstEmailID:  emailId1,
 		SecondEmailID: emailId2,
@@ -54,7 +44,6 @@ func (i impl) AddFriend(ctx context.Context, emailId1, emailId2 int) error {
 	}
 
 	errInsert := relaFriend1.Insert(ctx, i.dbConn, boil.Infer())
-
 	errInsert2 := relaFriend2.Insert(ctx, i.dbConn, boil.Infer())
 
 	return utils.MergeErrDB(errInsert, errInsert2)

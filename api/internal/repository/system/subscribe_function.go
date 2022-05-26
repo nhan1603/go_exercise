@@ -3,34 +3,23 @@ package system
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/pkg/errors"
+	pkgerrors "github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
-	"github.com/volatiletech/sqlboiler/v4/queries"
+	"github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"gobase/api/internal/repository/orm"
-	"gobase/api/pkg/utils"
 )
 
 // CheckExistedSubscribe will check that the first email has already subscribed the second one or not
 func (i impl) CheckExistedSubscribe(ctx context.Context, emailId1, emailId2 int) error {
+	_, err := orm.Relationships(qm.Where("first_email_id=?", emailId1), qm.Where("second_email_id = ?", emailId2),
+		qm.Expr(qm.Where("status = ?", SUBSCRIBE), qm.Or("status = ?", BLOCK))).One(ctx, i.dbConn)
 
-	relaObj := &orm.Relationship{}
-
-	sel := "*"
-
-	query := fmt.Sprintf(
-		"select %s from \"relationship\" where \"first_email_id\"=$1 and \"second_email_id\" = $2 and (\"status\" = $3 "+
-			"or \"status\" = $4)", sel,
-	)
-
-	q := queries.Raw(query, emailId1, emailId2, SUBSCRIBE, BLOCK)
-
-	err := q.Bind(ctx, i.dbConn, relaObj)
 	if err != nil {
 		if errors.Cause(err) == sql.ErrNoRows {
 			return nil
 		}
-		return errors.Wrap(err, "orm: unable to select from user")
+		return pkgerrors.WithStack(err)
 	}
 
 	return errors.New("Cannot create new subscription.")
@@ -38,14 +27,11 @@ func (i impl) CheckExistedSubscribe(ctx context.Context, emailId1, emailId2 int)
 
 // Subscribe will create a subscription for two email
 func (i impl) Subscribe(ctx context.Context, email1, email2 int) error {
-
 	relaSubscribe := orm.Relationship{
 		FirstEmailID:  email1,
 		SecondEmailID: email2,
 		Status:        SUBSCRIBE,
 	}
 
-	errInsert := relaSubscribe.Insert(ctx, i.dbConn, boil.Infer())
-
-	return utils.MergeErrDB(errInsert)
+	return pkgerrors.WithStack(relaSubscribe.Insert(ctx, i.dbConn, boil.Infer()))
 }
