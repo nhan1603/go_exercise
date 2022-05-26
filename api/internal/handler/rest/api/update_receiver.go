@@ -1,4 +1,4 @@
-package health
+package api
 
 import (
 	"encoding/json"
@@ -6,16 +6,16 @@ import (
 	"net/http"
 )
 
-type updateStructDTO struct {
+type UpdateReceiveInput struct {
 	Sender string `json:"sender"`
 	Text   string `json:"text"`
 }
 
 // UpdateReceiver returns a list of emails that will receive message from certain user
-func (h Handler) UpdateReceiver() http.HandlerFunc {
+func (h ApiHandler) UpdateReceiver() http.HandlerFunc {
 	return httpserv.ErrHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		decoder := json.NewDecoder(r.Body)
-		var req updateStructDTO
+		var req UpdateReceiveInput
 
 		err := decoder.Decode(&req)
 		if err != nil {

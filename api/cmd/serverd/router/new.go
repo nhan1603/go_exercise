@@ -2,6 +2,8 @@ package router
 
 import (
 	"context"
+	"gobase/api/internal/controller/rest"
+	"gobase/api/internal/handler/rest/api"
 
 	"gobase/api/internal/controller/products"
 	"gobase/api/internal/controller/system"
@@ -14,6 +16,7 @@ func New(
 	corsOrigin []string,
 	isGQLIntrospectionOn bool,
 	systemCtrl system.Controller,
+	apiCtrl rest.ApiRestController,
 	productCtrl products.Controller,
 ) Router {
 	return Router{
@@ -21,6 +24,7 @@ func New(
 		corsOrigins:          corsOrigin,
 		isGQLIntrospectionOn: isGQLIntrospectionOn,
 		healthRESTHandler:    health.New(systemCtrl),
+		apiRESTHandler:       api.New(apiCtrl),
 		productCtrl:          productCtrl,
 	}
 }

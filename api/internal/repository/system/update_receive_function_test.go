@@ -2,7 +2,6 @@ package system
 
 import (
 	"context"
-	"fmt"
 	"github.com/stretchr/testify/require"
 	"gobase/api/pkg/db/pg"
 	"gobase/api/pkg/testutil"
@@ -63,9 +62,6 @@ func TestImpl_UpdateReceiver(t *testing.T) {
 				result, err := repo.UpdateReceiver(context.Background(), id, tc.mentionedEmail)
 
 				require.NoError(t, err)
-
-				fmt.Println(result)
-				fmt.Println(tc.expRes)
 
 				require.Equal(t, result, tc.expRes)
 			})

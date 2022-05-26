@@ -1,4 +1,4 @@
-package system
+package rest
 
 import (
 	"context"
@@ -6,35 +6,28 @@ import (
 	"github.com/friendsofgo/errors"
 	"github.com/juliangruber/go-intersect"
 	pkgerrors "github.com/pkg/errors"
+	"gobase/api/internal/model"
 	"gobase/api/pkg/utils"
 	"strings"
 )
 
 // AddFriend will create a friendship for two email
-func (i impl) AddFriend(ctx context.Context, email1, email2 string) error {
-
-	if email1 == email2 {
-		return errors.New("Duplicate email input")
+func (i impl) AddFriend(ctx context.Context, input model.MakeFriend) error {
+	user1, err := i.repo.System().FindUserByEmail(ctx, input.FromFriend)
+	if err != nil {
+		return err
 	}
 
-	user1, err1 := i.repo.System().FindUserByEmail(ctx, email1)
-	if err1 != nil {
-		return err1
+	user2, err := i.repo.System().FindUserByEmail(ctx, input.ToFriend)
+	if err != nil {
+		return err
 	}
 
-	user2, err2 := i.repo.System().FindUserByEmail(ctx, email2)
-	if err2 != nil {
-		return err2
-	}
-
-	emailId1 := user1.ID
-	emailId2 := user2.ID
-
-	if err := i.repo.System().CheckExistedFriend(ctx, emailId1, emailId2); err != nil {
+	if err := i.repo.System().CheckExistedFriend(ctx, user1.ID, user2.ID); err != nil {
 		return pkgerrors.WithStack(err)
 	}
 
-	return pkgerrors.WithStack(i.repo.System().AddFriend(ctx, emailId1, emailId2))
+	return pkgerrors.WithStack(i.repo.System().AddFriend(ctx, user1.ID, user2.ID))
 }
 
 // CreateUser will create a new user for the email

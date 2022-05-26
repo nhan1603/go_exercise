@@ -1,4 +1,4 @@
-package health
+package api
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 )
 
 // Block creates a block relationship between two emails
-func (h Handler) Block() http.HandlerFunc {
+func (h ApiHandler) Block() http.HandlerFunc {
 	return httpserv.ErrHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		decoder := json.NewDecoder(r.Body)
 		var req SubscribeInput

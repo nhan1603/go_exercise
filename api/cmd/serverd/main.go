@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"gobase/api/internal/controller/rest"
 	"log"
 	"os"
 	"strconv"
@@ -85,6 +86,7 @@ func initRouter(
 		strings.Split(os.Getenv("CORS_ALLOWED_ORIGINS"), ","),
 		os.Getenv("GQL_INTROSPECTION_ENABLED") == "true",
 		system.New(repository.New(dbConn)),
+		rest.New(repository.New(dbConn)),
 		products.New(repository.New(dbConn)),
 	), nil
 }

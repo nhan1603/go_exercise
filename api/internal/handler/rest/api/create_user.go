@@ -1,4 +1,4 @@
-package health
+package api
 
 import (
 	"encoding/json"
@@ -6,15 +6,15 @@ import (
 	"net/http"
 )
 
-type userInfo struct {
+type UserInfoInput struct {
 	Email string `json:"email"`
 }
 
 // CreateUser create a user from email
-func (h Handler) CreateUser() http.HandlerFunc {
+func (h ApiHandler) CreateUser() http.HandlerFunc {
 	return httpserv.ErrHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		decoder := json.NewDecoder(r.Body)
-		var req userInfo
+		var req UserInfoInput
 
 		err := decoder.Decode(&req)
 		if err != nil {

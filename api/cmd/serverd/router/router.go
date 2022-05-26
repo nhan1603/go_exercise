@@ -4,6 +4,7 @@ import (
 	"context"
 	"gobase/api/internal/controller/products"
 	"gobase/api/internal/handler/gql/public"
+	"gobase/api/internal/handler/rest/api"
 	"gobase/api/pkg/httpserv/gql"
 	"net/http"
 
@@ -18,6 +19,7 @@ type Router struct {
 	corsOrigins          []string
 	isGQLIntrospectionOn bool
 	healthRESTHandler    health.Handler
+	apiRESTHandler       api.ApiHandler
 	productCtrl          products.Controller
 }
 
@@ -26,13 +28,13 @@ func (rtr Router) Handler() http.Handler {
 	return httpserv.Handler(
 		rtr.healthRESTHandler.CheckReadiness(),
 		rtr.healthRESTHandler.Liveness(),
-		rtr.healthRESTHandler.AddFriend(),
-		rtr.healthRESTHandler.CreateUser(),
-		rtr.healthRESTHandler.FindFriendList(),
-		rtr.healthRESTHandler.FindCommonFriend(),
-		rtr.healthRESTHandler.Subscribe(),
-		rtr.healthRESTHandler.Block(),
-		rtr.healthRESTHandler.UpdateReceiver(),
+		rtr.apiRESTHandler.AddFriend(),
+		rtr.apiRESTHandler.CreateUser(),
+		rtr.apiRESTHandler.FindFriendList(),
+		rtr.apiRESTHandler.FindCommonFriend(),
+		rtr.apiRESTHandler.Subscribe(),
+		rtr.apiRESTHandler.Block(),
+		rtr.apiRESTHandler.UpdateReceiver(),
 		rtr.routes)
 }
 

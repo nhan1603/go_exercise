@@ -31,6 +31,7 @@ func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) er
 		if errors.Cause(err) == sql.ErrNoRows {
 			return nil
 		}
+
 		return errors.Wrap(err, "orm: unable to select from user")
 	}
 

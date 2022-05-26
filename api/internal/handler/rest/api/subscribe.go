@@ -1,4 +1,4 @@
-package health
+package api
 
 import (
 	"encoding/json"
@@ -13,7 +13,7 @@ type SubscribeInput struct {
 }
 
 // Subscribe creates a subscription between two emails
-func (h Handler) Subscribe() http.HandlerFunc {
+func (h ApiHandler) Subscribe() http.HandlerFunc {
 	return httpserv.ErrHandlerFunc(func(w http.ResponseWriter, r *http.Request) error {
 		decoder := json.NewDecoder(r.Body)
 		var req SubscribeInput
