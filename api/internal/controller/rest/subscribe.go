@@ -3,23 +3,24 @@ package rest
 import (
 	"context"
 	"github.com/friendsofgo/errors"
+	"gobase/api/internal/model"
 	"gobase/api/internal/repository"
 )
 
 // Subscribe will create a subscription for of the second email for the first email
-func (i impl) Subscribe(ctx context.Context, email1, email2 string) error {
+func (i impl) Subscribe(ctx context.Context, input model.MakeRelationship) error {
 	newCtx := context.Background()
 	return i.repo.DoInTx(newCtx, func(ctx context.Context, repo repository.Registry) error {
-		if email1 == email2 {
+		if input.FromFriend == input.ToFriend {
 			return errors.New("Duplicate email input")
 		}
 
-		user1, err1 := i.repo.System().FindUserByEmail(ctx, email1)
+		user1, err1 := i.repo.System().FindUserByEmail(ctx, input.FromFriend)
 		if err1 != nil {
 			return err1
 		}
 
-		user2, err2 := i.repo.System().FindUserByEmail(ctx, email2)
+		user2, err2 := i.repo.System().FindUserByEmail(ctx, input.ToFriend)
 		if err2 != nil {
 			return err2
 		}

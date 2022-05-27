@@ -8,13 +8,13 @@ import (
 
 // ApiRestController represents the specification of this pkg
 type ApiRestController interface {
-	AddFriend(context.Context, model.MakeFriend) error
-	CreateUser(ctx context.Context, email string) (int, error)
-	FindFriendList(ctx context.Context, email string) ([]string, error)
-	FindCommonFriends(ctx context.Context, email1, email2 string) ([]string, error)
-	Subscribe(ctx context.Context, email1, email2 string) error
-	Block(ctx context.Context, email1, email2 string) error
-	UpdateReceiver(ctx context.Context, email, message string) ([]string, error)
+	AddFriend(context.Context, model.MakeRelationship) error
+	CreateUser(context.Context, string) (int, error)
+	FindFriendList(context.Context, string) ([]string, error)
+	FindCommonFriends(context.Context, model.CommonFriend) ([]string, error)
+	Subscribe(context.Context, model.MakeRelationship) error
+	Block(context.Context, model.MakeRelationship) error
+	UpdateReceiver(context.Context, string, string) ([]string, error)
 }
 
 // New initializes a new Controller instance and returns it

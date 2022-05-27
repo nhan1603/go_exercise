@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	pkgerrors "github.com/pkg/errors"
+	"gobase/api/internal/model"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
@@ -49,7 +50,11 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 			return pkgerrors.WithStack(errors.New("invalid array length"))
 		}
 
-		commonFriend, errFind := h.systemCtrl.FindCommonFriends(r.Context(), req.Friends[0], req.Friends[1])
+		commonFriend, errFind := h.systemCtrl.FindCommonFriends(r.Context(),
+			model.CommonFriend{
+				FirstUser:  req.Friends[0],
+				SecondUser: req.Friends[1],
+			})
 
 		if errFind != nil {
 			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errFind.Error()}

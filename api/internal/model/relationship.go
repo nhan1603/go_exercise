@@ -1,5 +1,9 @@
 package model
 
-type MakeFriend struct {
+type MakeRelationship struct {
 	FromFriend, ToFriend string
+}
+
+type CommonFriend struct {
+	FirstUser, SecondUser string
 }

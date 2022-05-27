@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"gobase/api/internal/model"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
@@ -17,7 +18,10 @@ func (h ApiHandler) Block() http.HandlerFunc {
 			panic(err)
 		}
 
-		errBlock := h.systemCtrl.Block(r.Context(), req.Requestor, req.Target)
+		errBlock := h.systemCtrl.Block(r.Context(), model.MakeRelationship{
+			FromFriend: req.Requestor,
+			ToFriend:   req.Target,
+		})
 
 		if errBlock != nil {
 			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errBlock.Error()}

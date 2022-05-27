@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/juliangruber/go-intersect"
+	"gobase/api/internal/model"
 	"gobase/api/pkg/utils"
 )
 
@@ -21,11 +22,11 @@ func (i impl) FindFriendList(ctx context.Context, email string) ([]string, error
 }
 
 // FindCommonFriends will return a list of common friends between to email addresses
-func (i impl) FindCommonFriends(ctx context.Context, email1, email2 string) ([]string, error) {
+func (i impl) FindCommonFriends(ctx context.Context, input model.CommonFriend) ([]string, error) {
 
-	listFriend1, err1 := i.FindFriendList(ctx, email1)
+	listFriend1, err1 := i.FindFriendList(ctx, input.FirstUser)
 
-	listFriend2, err2 := i.FindFriendList(ctx, email2)
+	listFriend2, err2 := i.FindFriendList(ctx, input.SecondUser)
 
 	if err := utils.MergeErr(err1, err2); err != nil {
 		return nil, err

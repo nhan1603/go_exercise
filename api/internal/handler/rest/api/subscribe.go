@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"gobase/api/internal/model"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
@@ -24,7 +25,7 @@ func (h ApiHandler) Subscribe() http.HandlerFunc {
 			return err
 		}
 
-		if err = h.systemCtrl.Subscribe(r.Context(), req.Requestor, req.Target); err != nil {
+		if err = h.systemCtrl.Subscribe(r.Context(), model.MakeRelationship{FromFriend: req.Requestor, ToFriend: req.Target}); err != nil {
 			return err
 		}
 

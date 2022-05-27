@@ -26,7 +26,7 @@ func (h ApiHandler) AddFriend() http.HandlerFunc {
 			return err
 		}
 
-		errAdd := h.systemCtrl.AddFriend(r.Context(), model.MakeFriend{
+		errAdd := h.systemCtrl.AddFriend(r.Context(), model.MakeRelationship{
 			FromFriend: req.Friends[0],
 			ToFriend:   req.Friends[1],
 		})

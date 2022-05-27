@@ -8,7 +8,7 @@ import (
 )
 
 // AddFriend will create a friendship for two email
-func (i impl) AddFriend(ctx context.Context, input model.MakeFriend) error {
+func (i impl) AddFriend(ctx context.Context, input model.MakeRelationship) error {
 	newCtx := context.Background()
 	return i.repo.DoInTx(newCtx, func(ctx context.Context, repo repository.Registry) error {
 		user1, err := i.repo.System().FindUserByEmail(ctx, input.FromFriend)
