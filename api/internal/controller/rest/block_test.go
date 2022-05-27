@@ -13,11 +13,11 @@ import (
 	"testing"
 )
 
-func TestImpl_AddFriend(t *testing.T) {
+func TestImpl_Block(t *testing.T) {
 	type arg struct {
 		input           model.MakeRelationship
 		mockDbOut       *orm.User
-		mockDBAddErr    error
+		mockDBBlockErr  error
 		mockDBFindErr   error
 		mockDBCheckErr  error
 		expDBMockCalled bool
@@ -46,7 +46,7 @@ func TestImpl_AddFriend(t *testing.T) {
 			mockDBFindErr:   errors.New("error find user"),
 			expErr:          errors.New("error find user"),
 		},
-		"errDbExistedFriend": {
+		"errDbExistedBlock": {
 			input: model.MakeRelationship{
 				FromFriend: "nhan.test123@test.com",
 				ToFriend:   "nhan.test1234@test.com",
@@ -55,10 +55,10 @@ func TestImpl_AddFriend(t *testing.T) {
 				Email: "nhan.test123@test.com",
 			},
 			expDBMockCalled: true,
-			mockDBCheckErr:  errors.New("error check existed friend"),
-			expErr:          errors.New("error check existed friend"),
+			mockDBCheckErr:  errors.New("error check existed block"),
+			expErr:          errors.New("error check existed block"),
 		},
-		"errDbAdd": {
+		"errDbBlock": {
 			input: model.MakeRelationship{
 				FromFriend: "nhan.test123@test.com",
 				ToFriend:   "nhan.test1234@test.com",
@@ -67,8 +67,8 @@ func TestImpl_AddFriend(t *testing.T) {
 				Email: "nhan.test123@test.com",
 			},
 			expDBMockCalled: true,
-			mockDBAddErr:    errors.New("error add friend"),
-			expErr:          errors.New("error add friend"),
+			mockDBBlockErr:  errors.New("error block"),
+			expErr:          errors.New("error block"),
 		},
 	}
 	for s, tc := range tcs {
@@ -76,9 +76,9 @@ func TestImpl_AddFriend(t *testing.T) {
 			// Given:
 			systemRepo := system.MockRepository{}
 			if tc.expDBMockCalled {
-				callAdd := systemRepo.On("AddFriend", mock.Anything, mock.Anything, mock.Anything).Return(tc.mockDBAddErr)
+				callBlock := systemRepo.On("Block", mock.Anything, mock.Anything, mock.Anything).Return(tc.mockDBBlockErr)
 				callFind := systemRepo.On("FindUserByEmail", mock.Anything, mock.Anything).Return(tc.mockDbOut, tc.mockDBFindErr)
-				callCheck := systemRepo.On("CheckExistedFriend", mock.Anything, mock.Anything, mock.Anything).Return(tc.mockDBCheckErr)
+				callCheck := systemRepo.On("CheckExistedBlock", mock.Anything, mock.Anything, mock.Anything).Return(tc.mockDBCheckErr)
 				systemRepo.ExpectedCalls = []*mock.Call{}
 
 				if tc.mockDBFindErr != nil {
@@ -86,7 +86,7 @@ func TestImpl_AddFriend(t *testing.T) {
 				} else if tc.mockDBCheckErr != nil {
 					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind, callCheck)
 				} else {
-					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind, callAdd, callCheck)
+					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind, callBlock, callCheck)
 				}
 			}
 
@@ -100,7 +100,7 @@ func TestImpl_AddFriend(t *testing.T) {
 			c := New(&repo)
 
 			// When:
-			err := c.AddFriend(context.Background(), tc.input)
+			err := c.Block(context.Background(), tc.input)
 
 			// Then:
 			require.Equal(t, tc.expErr, pkgerrors.Cause(err))
