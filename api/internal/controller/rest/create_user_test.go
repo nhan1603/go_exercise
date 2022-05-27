@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	frerrors "github.com/friendsofgo/errors"
-	pkgerrors "github.com/pkg/errors"
+	"database/sql"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"gobase/api/internal/repository"
@@ -25,8 +25,9 @@ func TestImpl_CreateUser(t *testing.T) {
 	tcs := map[string]arg{
 		"success": {
 			input:           "nhan.test12345@test.com123",
-			mockDbOut:       nil,
-			expDBMockCalled: true,
+			mockDbOut:        nil,
+			mockDBFindErr:    sql.ErrNoRows,
+			expDBMockCalled:  true,
 		},
 		"errDbExistedUser": {
 			input: "nhan.test123@test.com",
@@ -34,14 +35,13 @@ func TestImpl_CreateUser(t *testing.T) {
 				Email: "nhan.test123@test.com",
 			},
 			expDBMockCalled: true,
-			mockDBFindErr:   errors.New("error existed user"),
+			mockDBFindErr:   nil,
 			expErr:          frerrors.New("Existed email input."),
 		},
 		"errDbCreate": {
 			input: "nhan.test123@test.com",
-			mockDbOut: &orm.User{
-				Email: "nhan.test123@test.com",
-			},
+			mockDbOut:        nil,
+			mockDBFindErr:    sql.ErrNoRows,
 			expDBMockCalled: true,
 			mockDBCreateErr: errors.New("error from database"),
 			expErr:          errors.New("error from database"),
@@ -56,8 +56,8 @@ func TestImpl_CreateUser(t *testing.T) {
 				callCreate := systemRepo.On("CreateUser", mock.Anything, mock.Anything).Return(0, tc.mockDBCreateErr)
 				systemRepo.ExpectedCalls = []*mock.Call{}
 
-				if tc.mockDBFindErr != nil {
-					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind, callCreate)
+				if tc.mockDBFindErr == nil {
+					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind)
 				} else {
 					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind, callCreate)
 				}
@@ -77,7 +77,11 @@ func TestImpl_CreateUser(t *testing.T) {
 
 			// Then:
 			require.Equal(t, 0, id)
-			require.Equal(t, tc.expErr, pkgerrors.Cause(err))
+			if tc.expErr == nil {
+				require.NoError(t, err)
+			} else {
+				require.Equal(t, tc.expErr.Error(), err.Error())
+			}
 			systemRepo.AssertExpectations(t)
 			repo.AssertExpectations(t)
 		})
