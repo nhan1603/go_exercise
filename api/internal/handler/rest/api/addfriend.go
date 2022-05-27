@@ -45,15 +45,15 @@ func (h ApiHandler) AddFriend() http.HandlerFunc {
 
 func (i MakeFriendInput) validate() error {
 	if len(i.Friends) != 2 {
-		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "Friendly message"}
+		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "User has provided wrong amount of emails"}
 	}
 
 	if i.Friends[0] == i.Friends[1] {
-		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "Friendly message"}
+		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "User has provided identical emails"}
 	}
 
 	if i.Friends[0] == "" || i.Friends[1] == "" {
-		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "Friendly message"}
+		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "User has provided empty email"}
 	}
 
 	return nil

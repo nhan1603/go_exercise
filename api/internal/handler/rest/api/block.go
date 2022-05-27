@@ -18,6 +18,10 @@ func (h ApiHandler) Block() http.HandlerFunc {
 			panic(err)
 		}
 
+		if err = req.validate(); err != nil {
+			return err
+		}
+
 		errBlock := h.systemCtrl.Block(r.Context(), model.MakeRelationship{
 			FromFriend: req.Requestor,
 			ToFriend:   req.Target,

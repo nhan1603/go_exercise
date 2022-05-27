@@ -22,6 +22,10 @@ func (h ApiHandler) UpdateReceiver() http.HandlerFunc {
 			panic(err)
 		}
 
+		if err = req.validate(); err != nil {
+			return err
+		}
+
 		listReceiver, errFind := h.systemCtrl.UpdateReceiver(r.Context(), req.Sender, req.Text)
 
 		if errFind == nil {
@@ -35,4 +39,12 @@ func (h ApiHandler) UpdateReceiver() http.HandlerFunc {
 
 		return errFind
 	})
+}
+
+func (i UpdateReceiveInput) validate() error {
+	if i.Sender == "" {
+		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "User has provided empty email"}
+	}
+
+	return nil
 }
