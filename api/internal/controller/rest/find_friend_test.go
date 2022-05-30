@@ -3,8 +3,7 @@ package rest
 import (
 	"context"
 	"database/sql"
-	"errors"
-	frerrors "github.com/friendsofgo/errors"
+	"github.com/pkg/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"gobase/api/internal/repository"
@@ -13,53 +12,56 @@ import (
 	"testing"
 )
 
-func TestImpl_CreateUser(t *testing.T) {
+func TestImpl_FindFriendList(t *testing.T) {
 	type arg struct {
-		input           string
-		mockDbOut       *orm.User
-		mockDBFindErr   error
-		mockDBCreateErr error
-		expDBMockCalled bool
-		expErr          error
+		input               string
+		mockDbOut           *orm.User
+		mockDbLsFriendOut   []string
+		mockDBFindErr       error
+		mockDBFindFriendErr error
+		expDBMockCalled     bool
+		expErr              error
 	}
 	tcs := map[string]arg{
 		"success": {
-			input:           "nhan.test12345@test.com",
-			mockDbOut:       nil,
-			mockDBFindErr:   sql.ErrNoRows,
-			expDBMockCalled: true,
-		},
-		"errDbExistedUser": {
-			input: "nhan.test123@test.com",
+			input: "nhan.test12345@test.com",
 			mockDbOut: &orm.User{
-				Email: "nhan.test123@test.com",
+				Email: "nhan.test12345@test.com",
 			},
-			expDBMockCalled: true,
-			mockDBFindErr:   nil,
-			expErr:          frerrors.New("Existed email input."),
+			mockDbLsFriendOut: []string{"nhan.tran3@testtest.com"},
+			expDBMockCalled:   true,
 		},
-		"errDbCreate": {
+		"errDbNonExistedUser": {
 			input:           "nhan.test123@test.com",
 			mockDbOut:       nil,
 			mockDBFindErr:   sql.ErrNoRows,
 			expDBMockCalled: true,
-			mockDBCreateErr: errors.New("error from database"),
-			expErr:          errors.New("error from database"),
+			expErr:          sql.ErrNoRows,
+		},
+		"errDbFindListFr": {
+			input: "nhan.test123@test.com",
+			mockDbOut: &orm.User{
+				Email: "nhan.test12345@test.com",
+			},
+			expDBMockCalled:     true,
+			mockDBFindFriendErr: errors.New("orm: unable to select from user and relationship"),
+			expErr:              errors.New("orm: unable to select from user and relationship"),
 		},
 	}
+
 	for s, tc := range tcs {
 		t.Run(s, func(t *testing.T) {
 			// Given:
 			systemRepo := system.MockRepository{}
 			if tc.expDBMockCalled {
 				callFind := systemRepo.On("FindUserByEmail", mock.Anything, mock.Anything).Return(tc.mockDbOut, tc.mockDBFindErr)
-				callCreate := systemRepo.On("CreateUser", mock.Anything, mock.Anything).Return(0, tc.mockDBCreateErr)
+				callFindFriend := systemRepo.On("FindFriendList", mock.Anything, mock.Anything).Return(tc.mockDbLsFriendOut, tc.mockDBFindFriendErr)
 				systemRepo.ExpectedCalls = []*mock.Call{}
 
-				if tc.mockDBFindErr == nil {
+				if tc.mockDBFindErr != nil {
 					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind)
 				} else {
-					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind, callCreate)
+					systemRepo.ExpectedCalls = append(systemRepo.ExpectedCalls, callFind, callFindFriend)
 				}
 			}
 
@@ -73,10 +75,10 @@ func TestImpl_CreateUser(t *testing.T) {
 			c := New(&repo)
 
 			// When:
-			id, err := c.CreateUser(context.Background(), tc.input)
+			lsFr, err := c.FindFriendList(context.Background(), tc.input)
 
 			// Then:
-			require.Equal(t, 0, id)
+			require.Equal(t, tc.mockDbLsFriendOut, lsFr)
 			if tc.expErr == nil {
 				require.NoError(t, err)
 			} else {
@@ -86,4 +88,5 @@ func TestImpl_CreateUser(t *testing.T) {
 			repo.AssertExpectations(t)
 		})
 	}
+
 }
