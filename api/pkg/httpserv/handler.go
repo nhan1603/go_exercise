@@ -8,7 +8,7 @@ import (
 )
 
 func Handler(
-	readiness, liveness, addfriend, createuser, getfriendlist, getcommonfriend,
+	readiness, liveness, addFriend, createUser, getFriendList, getCommonFriend,
 	subscribe, block, updateReceiver http.HandlerFunc,
 	routerFunc func(chi.Router)) http.Handler {
 	r := chi.NewRouter()
@@ -24,13 +24,13 @@ func Handler(
 	r.Get("/_/ready", readiness)
 	r.Get("/_/live", liveness)
 
-	r.Post("/_/add-friend", addfriend)
+	r.Post("/_/add-friend", addFriend)
 
-	r.Post("/_/create-user", createuser)
+	r.Post("/_/create-user", createUser)
 
-	r.Post("/_/friend-list", getfriendlist)
+	r.Post("/_/friend-list", getFriendList)
 
-	r.Post("/_/common-friend", getcommonfriend)
+	r.Post("/_/common-friend", getCommonFriend)
 
 	r.Post("/_/subscribe", subscribe)
 

@@ -15,7 +15,7 @@ func (h ApiHandler) Block() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			panic(err)
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
 		}
 
 		if err = req.validate(); err != nil {
@@ -28,7 +28,7 @@ func (h ApiHandler) Block() http.HandlerFunc {
 		})
 
 		if errBlock != nil {
-			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errBlock.Error()}
+			return errBlock
 		}
 
 		if errBlock == nil {

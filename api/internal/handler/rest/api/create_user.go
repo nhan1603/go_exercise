@@ -18,13 +18,17 @@ func (h ApiHandler) CreateUser() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			panic(err)
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
+		}
+
+		if err = req.validate(); err != nil {
+			return err
 		}
 
 		_, errCreate := h.systemCtrl.CreateUser(r.Context(), req.Email)
 
 		if errCreate != nil {
-			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errCreate.Error()}
+			return errCreate
 		}
 
 		if errCreate == nil {
@@ -33,4 +37,11 @@ func (h ApiHandler) CreateUser() http.HandlerFunc {
 
 		return errCreate
 	})
+}
+
+func (i UserInfoInput) validate() error {
+	if i.Email == "" {
+		return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_input", Desc: "User has provided empty email"}
+	}
+	return nil
 }

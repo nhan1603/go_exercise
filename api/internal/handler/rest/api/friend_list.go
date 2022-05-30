@@ -2,8 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
-	pkgerrors "github.com/pkg/errors"
 	"gobase/api/internal/model"
 	"gobase/api/pkg/httpserv"
 	"net/http"
@@ -17,7 +15,11 @@ func (h ApiHandler) FindFriendList() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			panic(err)
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
+		}
+
+		if err = req.validate(); err != nil {
+			return err
 		}
 
 		listFriend, errFind := h.systemCtrl.FindFriendList(r.Context(), req.Email)
@@ -29,7 +31,7 @@ func (h ApiHandler) FindFriendList() http.HandlerFunc {
 				Count:   len(listFriend),
 			})
 		} else {
-			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errFind.Error()}
+			return errFind
 		}
 
 		return errFind
@@ -44,10 +46,11 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			panic(err)
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
 		}
-		if len(req.Friends) != 2 {
-			return pkgerrors.WithStack(errors.New("invalid array length"))
+
+		if err = req.validate(); err != nil {
+			return err
 		}
 
 		commonFriend, errFind := h.systemCtrl.FindCommonFriends(r.Context(),
@@ -57,7 +60,7 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 			})
 
 		if errFind != nil {
-			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errFind.Error()}
+			return errFind
 		}
 
 		if errFind == nil {

@@ -19,7 +19,7 @@ func (h ApiHandler) UpdateReceiver() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			panic(err)
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
 		}
 
 		if err = req.validate(); err != nil {

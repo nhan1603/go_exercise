@@ -21,8 +21,7 @@ func (h ApiHandler) Subscribe() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			// return bad request
-			return err
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
 		}
 
 		if err = req.validate(); err != nil {
