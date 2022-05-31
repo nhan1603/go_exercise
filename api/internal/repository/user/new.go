@@ -1,14 +1,16 @@
-package system
+package user
 
 import (
 	"context"
+	"gobase/api/internal/repository/orm"
+
 	"gobase/api/pkg/db/pg"
 )
 
 // Repository provides the specification of the functionality provided by this pkg
 type Repository interface {
-	// CheckDB will check if calls to DB are successful or not
-	CheckDB(context.Context) error
+	FindUserByEmail(context.Context, string) (orm.User, error)
+	CreateUser(context.Context, string) (int, error)
 }
 
 // New returns an implementation instance satisfying Repository

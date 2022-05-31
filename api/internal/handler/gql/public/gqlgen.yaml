@@ -10,14 +10,14 @@ skip_mod_tidy: true
 
 models:
   Int64:
-    model: gobase/api/pkg/httpserv/gql/scalar.Int64
+    model: gobase/relationship/pkg/httpserv/gql/scalar.Int64
   Time:
-    model: gobase/api/pkg/httpserv/gql/scalar.Time
+    model: gobase/relationship/pkg/httpserv/gql/scalar.Time
   ProductStatus:
-    model: gobase/api/internal/model.ProductStatus
+    model: gobase/relationship/internal/model.ProductStatus
   Product:
-    model: gobase/api/internal/handler/gql/mod.Product
+    model: gobase/relationship/internal/handler/gql/mod.Product
   CreateProductInput:
-    model: gobase/api/internal/handler/gql/public.CreateProductInput
+    model: gobase/relationship/internal/handler/gql/public.CreateProductInput
   UpdateProductInput:
-    model: gobase/api/internal/handler/gql/public.UpdateProductInput
+    model: gobase/relationship/internal/handler/gql/public.UpdateProductInput
