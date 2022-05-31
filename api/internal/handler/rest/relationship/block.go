@@ -28,6 +28,9 @@ func (h ApiHandler) Block() http.HandlerFunc {
 		})
 
 		if errBlock != nil {
+			if errBlock.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errBlock.Error()}
+			}
 			return errBlock
 		}
 

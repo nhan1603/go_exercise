@@ -22,7 +22,7 @@ func TestApiHandler_CreateUser(t *testing.T) {
 	}{
 		"error_invalid_body": {
 			expStatus: http.StatusBadRequest,
-			expErr:    &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: "EOF"},
+			expErr:    &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "EOF"},
 			body:      []byte(``),
 			errDb:     nil,
 		},
@@ -37,6 +37,12 @@ func TestApiHandler_CreateUser(t *testing.T) {
 			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "Something went wrong"},
 			body:      []byte(`{"email":"andy@example.com"}`),
 			errDb:     errors.New("cannot create user"),
+		},
+		"failFromDBInvalidUser": {
+			expStatus: http.StatusNotFound,
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			body:      []byte(`{"email":"andy@example.com"}`),
+			errDb:     errors.New("not found"),
 		},
 		"success": {
 			expStatus: http.StatusOK,

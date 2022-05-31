@@ -32,6 +32,9 @@ func (h ApiHandler) FindFriendList() http.HandlerFunc {
 				Count:   len(listFriend),
 			})
 		} else {
+			if errFind.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errFind.Error()}
+			}
 			return errFind
 		}
 
@@ -61,6 +64,9 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 			})
 
 		if errFind != nil {
+			if errFind.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errFind.Error()}
+			}
 			return errFind
 		}
 

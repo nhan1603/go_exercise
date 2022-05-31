@@ -32,6 +32,9 @@ func (h ApiHandler) AddFriend() http.HandlerFunc {
 		})
 
 		if errAdd != nil {
+			if errAdd.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errAdd.Error()}
+			}
 			return errAdd
 		}
 

@@ -44,6 +44,12 @@ func TestApiHandler_Block(t *testing.T) {
 			body:      []byte(`{"requestor":"andy@example.com","target":"john@example.com"}`),
 			errDb:     errors.New("cannot block user"),
 		},
+		"failFromDBInvalidUser": {
+			expStatus: http.StatusNotFound,
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			body:      []byte(`{"requestor":"andy@example.com","target":"john@example.com"}`),
+			errDb:     errors.New("not found"),
+		},
 		"success": {
 			expStatus: http.StatusOK,
 			expErr:    nil,

@@ -42,6 +42,12 @@ func TestApiHandler_FindFriendList(t *testing.T) {
 			errDb:     errors.New("cannot find user"),
 			resultDb:  []string{},
 		},
+		"failFromDBInvalidUser": {
+			expStatus: http.StatusNotFound,
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			body:      []byte(`{"email":"andy@example.com"}`),
+			errDb:     errors.New("not found"),
+		},
 		"success": {
 			expStatus: http.StatusOK,
 			expErr:    nil,
@@ -118,6 +124,13 @@ func TestApiHandler_FindCommonFriend(t *testing.T) {
 			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "Something went wrong"},
 			body:      []byte(`{"friends":["andy@example.com","john@example.com"]}`),
 			errDb:     errors.New("cannot create new friendship"),
+			resultDb:  []string{},
+		},
+		"failFromDBInvalidUser": {
+			expStatus: http.StatusNotFound,
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			body:      []byte(`{"friends":["andy@example.com","john@example.com"]}`),
+			errDb:     errors.New("not found"),
 			resultDb:  []string{},
 		},
 		"success": {

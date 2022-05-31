@@ -34,7 +34,10 @@ func (h ApiHandler) UpdateReceiver() http.HandlerFunc {
 				Recipients: listReceiver,
 			})
 		} else {
-			return httpserv.Error{Status: http.StatusBadRequest, Code: "error request", Desc: errFind.Error()}
+			if errFind.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errFind.Error()}
+			}
+			return errFind
 		}
 
 		return errFind

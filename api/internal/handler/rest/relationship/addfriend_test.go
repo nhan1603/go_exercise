@@ -50,6 +50,12 @@ func TestApiHandler_AddFriend(t *testing.T) {
 			body:      []byte(`{"friends":["andy@example.com","john@example.com"]}`),
 			errDb:     errors.New("cannot create new friendship"),
 		},
+		"failFromDBInvalidUser": {
+			expStatus: http.StatusNotFound,
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			body:      []byte(`{"friends":["andy@example.com","john@example.com"]}`),
+			errDb:     errors.New("not found"),
+		},
 		"success": {
 			expStatus: http.StatusOK,
 			expErr:    nil,

@@ -29,6 +29,9 @@ func (h ApiHandler) Subscribe() http.HandlerFunc {
 		}
 
 		if err = h.relaCtrl.Subscribe(r.Context(), model.MakeRelationship{FromFriend: req.Requestor, ToFriend: req.Target}); err != nil {
+			if err.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
+			}
 			return err
 		}
 

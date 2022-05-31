@@ -42,6 +42,13 @@ func TestApiHandler_UpdateReceiver(t *testing.T) {
 			errDb:     errors.New("cannot find user"),
 			resultDb:  []string{},
 		},
+		"failFromDBInvalidUser": {
+			expStatus: http.StatusNotFound,
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			body:      []byte(`{"sender":"andy@example.com","text":"john@example.com"}`),
+			errDb:     errors.New("not found"),
+			resultDb:  []string{},
+		},
 		"success": {
 			expStatus: http.StatusOK,
 			expErr:    nil,
