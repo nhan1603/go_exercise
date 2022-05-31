@@ -2,6 +2,7 @@ package rest
 
 import (
 	"context"
+
 	pkgerrors "github.com/pkg/errors"
 	"gobase/api/internal/model"
 )

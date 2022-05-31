@@ -18,6 +18,7 @@ func TestRouter_Handler(t *testing.T) {
 		true,
 		nil,
 		nil,
+		nil,
 	)
 
 	expectedRoutes := []string{

@@ -11,7 +11,7 @@ import (
 type Repository interface {
 	// CheckDB will check if calls to DB are successful or not
 	CheckDB(context.Context) error
-	FindUserByEmail(context.Context, string) (*orm.User, error)
+	FindUserByEmail(context.Context, string) (orm.User, error)
 	CheckExistedFriend(context.Context, int, int) error
 	AddFriend(context.Context, int, int) error
 	CreateUser(context.Context, string) (int, error)
