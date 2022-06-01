@@ -36,7 +36,7 @@ func TestImpl_Subscribe(t *testing.T) {
 
 				id1, err1 := userRepo.CreateUser(context.Background(), tc.email1)
 
-				id2, err2 := userRepo.CreateUser(context.Background(), tc.email1)
+				id2, err2 := userRepo.CreateUser(context.Background(), tc.email2)
 
 				require.NoError(t, err1)
 				require.NoError(t, err2)
