@@ -2,19 +2,20 @@ package relationship
 
 import (
 	"context"
+	"gobase/api/internal/model"
 	"strings"
 )
 
 // UpdateReceiver returns a list of emails that will receive message from certain user
-func (i impl) UpdateReceiver(ctx context.Context, email, message string) ([]string, error) {
+func (i impl) UpdateReceiver(ctx context.Context, input model.UpdateInfo) ([]string, error) {
 
-	user, err := i.repo.User().FindUserByEmail(ctx, email)
+	user, err := i.repo.User().FindUserByEmail(ctx, input.Sender)
 	if err != nil {
 		return nil, err
 	}
 
 	// find users mentioned in the update
-	words := strings.Fields(message)
+	words := strings.Fields(input.Message)
 
 	var emailList []string
 

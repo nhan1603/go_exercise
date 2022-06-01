@@ -7,3 +7,7 @@ type MakeRelationship struct {
 type CommonFriend struct {
 	FirstUser, SecondUser string
 }
+
+type UpdateInfo struct {
+	Sender, Message string
+}

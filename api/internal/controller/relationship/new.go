@@ -13,7 +13,7 @@ type ApiRestController interface {
 	FindCommonFriends(context.Context, model.CommonFriend) ([]string, error)
 	Subscribe(context.Context, model.MakeRelationship) error
 	Block(context.Context, model.MakeRelationship) error
-	UpdateReceiver(context.Context, string, string) ([]string, error)
+	UpdateReceiver(context.Context, model.UpdateInfo) ([]string, error)
 }
 
 // New initializes a new Controller instance and returns it

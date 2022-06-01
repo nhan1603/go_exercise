@@ -2,6 +2,7 @@ package relationship
 
 import (
 	"encoding/json"
+	"gobase/api/internal/model"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 )
@@ -26,7 +27,7 @@ func (h ApiHandler) UpdateReceiver() http.HandlerFunc {
 			return err
 		}
 
-		listReceiver, errFind := h.relaCtrl.UpdateReceiver(r.Context(), req.Sender, req.Text)
+		listReceiver, errFind := h.relaCtrl.UpdateReceiver(r.Context(), model.UpdateInfo{Sender: req.Sender, Message: req.Text})
 
 		if errFind == nil {
 			httpserv.RespondJSON(r.Context(), w, httpserv.UpdateReceiveResponse{

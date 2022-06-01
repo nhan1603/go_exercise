@@ -3,6 +3,7 @@ package relationship
 import (
 	"context"
 	"database/sql"
+	"gobase/api/internal/model"
 	"testing"
 
 	"github.com/pkg/errors"
@@ -85,7 +86,10 @@ func TestImpl_UpdateReceiver(t *testing.T) {
 			c := New(&repo)
 
 			// When:
-			lsFr, err := c.UpdateReceiver(context.Background(), tc.email, tc.message)
+			lsFr, err := c.UpdateReceiver(context.Background(), model.UpdateInfo{
+				Sender:  tc.email,
+				Message: tc.message,
+			})
 
 			// Then:
 			require.Equal(t, tc.mockDbLsEmailOut, lsFr)
