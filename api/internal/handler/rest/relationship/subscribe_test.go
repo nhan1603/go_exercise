@@ -3,14 +3,15 @@ package relationship
 import (
 	"bytes"
 	"errors"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"gobase/api/internal/controller/relationship"
 	"gobase/api/internal/controller/user"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestApiHandler_Subscribe(t *testing.T) {
@@ -22,7 +23,7 @@ func TestApiHandler_Subscribe(t *testing.T) {
 	}{
 		"error_invalid_body": {
 			expStatus: http.StatusBadRequest,
-			expErr:    &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: "EOF"},
+			expErr:    &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "EOF"},
 			body:      []byte(``),
 			errDb:     nil,
 		},

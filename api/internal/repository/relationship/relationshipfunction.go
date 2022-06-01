@@ -3,12 +3,13 @@ package relationship
 import (
 	"context"
 	"database/sql"
+	"gobase/api/internal/repository/orm"
+	"gobase/api/pkg/utils"
+
 	"github.com/friendsofgo/errors"
 	pkgerrors "github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"gobase/api/internal/repository/orm"
-	"gobase/api/pkg/utils"
 )
 
 // CheckExistedFriend will check a relationship between two emails has already existed or not

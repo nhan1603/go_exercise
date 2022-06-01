@@ -2,13 +2,14 @@ package relationship
 
 import (
 	"context"
-	"github.com/pkg/errors"
-	"github.com/stretchr/testify/require"
 	"gobase/api/internal/repository/user"
 	"gobase/api/pkg/db/pg"
 	"gobase/api/pkg/testutil"
 	"os"
 	"testing"
+
+	"github.com/pkg/errors"
+	"github.com/stretchr/testify/require"
 )
 
 func TestImpl_Subscribe(t *testing.T) {

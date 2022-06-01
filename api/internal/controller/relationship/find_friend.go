@@ -3,9 +3,10 @@ package relationship
 import (
 	"context"
 	"fmt"
-	"github.com/juliangruber/go-intersect"
 	"gobase/api/internal/model"
 	"gobase/api/pkg/utils"
+
+	"github.com/juliangruber/go-intersect"
 )
 
 // FindFriendList will return a list of friends of an email address

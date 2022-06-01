@@ -4,9 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"gobase/api/internal/repository/orm"
+
 	pkgerrors "github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
-	"gobase/api/internal/repository/orm"
 )
 
 // FindUserByEmail will find the user entity with the corresponding email

@@ -2,8 +2,8 @@ package user
 
 import (
 	"context"
-	"gobase/api/internal/repository/orm"
 
+	"gobase/api/internal/repository/orm"
 	"gobase/api/pkg/db/pg"
 )
 

@@ -2,13 +2,14 @@ package relationship
 
 import (
 	"context"
-	"github.com/stretchr/testify/require"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 	"gobase/api/internal/repository/orm"
 	"gobase/api/pkg/db/pg"
 	"gobase/api/pkg/testutil"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func TestImpl_FindFriendList(t *testing.T) {

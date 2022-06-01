@@ -16,7 +16,7 @@ func (h ApiHandler) FindFriendList() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: err.Error()}
 		}
 
 		if err = req.Validate(); err != nil {
@@ -50,7 +50,7 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			return &httpserv.Error{Status: http.StatusBadRequest, Code: "error in request body", Desc: err.Error()}
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: err.Error()}
 		}
 
 		if err = req.validate(); err != nil {

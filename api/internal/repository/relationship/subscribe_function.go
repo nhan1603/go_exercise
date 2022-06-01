@@ -3,11 +3,12 @@ package relationship
 import (
 	"context"
 	"database/sql"
+	"gobase/api/internal/repository/orm"
+
 	"github.com/pkg/errors"
 	pkgerrors "github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/queries/qm"
-	"gobase/api/internal/repository/orm"
 )
 
 // CheckExistedSubscribe will check that the first email has already subscribed the second one or not

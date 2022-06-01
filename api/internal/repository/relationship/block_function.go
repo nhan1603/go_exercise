@@ -3,11 +3,12 @@ package relationship
 import (
 	"context"
 	"database/sql"
+	"gobase/api/internal/repository/orm"
+	"gobase/api/pkg/utils"
+
 	"github.com/pkg/errors"
 	pkgerrors "github.com/pkg/errors"
 	"github.com/volatiletech/sqlboiler/v4/boil"
-	"gobase/api/internal/repository/orm"
-	"gobase/api/pkg/utils"
 )
 
 // CheckExistedBlock will check that the first email has already Blocked the second one or not

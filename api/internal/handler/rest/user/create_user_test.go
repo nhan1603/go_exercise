@@ -3,14 +3,15 @@ package user
 import (
 	"bytes"
 	"errors"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
 	"gobase/api/internal/controller/relationship"
 	"gobase/api/internal/controller/user"
 	"gobase/api/pkg/httpserv"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestApiHandler_CreateUser(t *testing.T) {

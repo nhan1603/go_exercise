@@ -4,13 +4,14 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"testing"
+
 	frerrors "github.com/friendsofgo/errors"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"gobase/api/internal/repository"
 	"gobase/api/internal/repository/orm"
 	"gobase/api/internal/repository/user"
-	"testing"
 )
 
 func TestImpl_CreateUser(t *testing.T) {

@@ -2,14 +2,15 @@ package user
 
 import (
 	"context"
-	"github.com/friendsofgo/errors"
-	"github.com/stretchr/testify/require"
-	"github.com/volatiletech/sqlboiler/v4/boil"
 	"gobase/api/internal/repository/orm"
 	"gobase/api/pkg/db/pg"
 	"gobase/api/pkg/testutil"
 	"os"
 	"testing"
+
+	"github.com/friendsofgo/errors"
+	"github.com/stretchr/testify/require"
+	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
 func TestImpl_CreateUser(t *testing.T) {
