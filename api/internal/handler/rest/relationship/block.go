@@ -15,7 +15,7 @@ func (h ApiHandler) Block() http.HandlerFunc {
 
 		err := decoder.Decode(&req)
 		if err != nil {
-			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: err.Error()}
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
 		}
 
 		if err = req.validate(); err != nil {

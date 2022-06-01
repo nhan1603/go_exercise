@@ -23,7 +23,7 @@ func TestApiHandler_CreateUser(t *testing.T) {
 	}{
 		"error_invalid_body": {
 			expStatus: http.StatusBadRequest,
-			expErr:    &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "EOF"},
+			expErr:    &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"},
 			body:      []byte(``),
 			errDb:     nil,
 		},

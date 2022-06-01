@@ -102,13 +102,13 @@ func (_m *MockApiRestController) Subscribe(_a0 context.Context, _a1 model.MakeRe
 	return r0
 }
 
-// UpdateReceiver provides a mock function with given fields: _a0, _a1, _a2
-func (_m *MockApiRestController) UpdateReceiver(_a0 context.Context, _a1 string, _a2 string) ([]string, error) {
-	ret := _m.Called(_a0, _a1, _a2)
+// UpdateReceiver provides a mock function with given fields: _a0, _a1
+func (_m *MockApiRestController) UpdateReceiver(_a0 context.Context, _a1 model.UpdateInfo) ([]string, error) {
+	ret := _m.Called(_a0, _a1)
 
 	var r0 []string
-	if rf, ok := ret.Get(0).(func(context.Context, string, string) []string); ok {
-		r0 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(0).(func(context.Context, model.UpdateInfo) []string); ok {
+		r0 = rf(_a0, _a1)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]string)
@@ -116,8 +116,8 @@ func (_m *MockApiRestController) UpdateReceiver(_a0 context.Context, _a1 string,
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
-		r1 = rf(_a0, _a1, _a2)
+	if rf, ok := ret.Get(1).(func(context.Context, model.UpdateInfo) error); ok {
+		r1 = rf(_a0, _a1)
 	} else {
 		r1 = ret.Error(1)
 	}
