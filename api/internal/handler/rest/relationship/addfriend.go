@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// MakeFriendInput struct for parsing body from request for making friends
 type MakeFriendInput struct {
 	Friends []string `json:"friends"`
 }

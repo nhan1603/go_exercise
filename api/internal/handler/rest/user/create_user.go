@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// UserInfoInput represents the parsing data from request body creating a new user
 type UserInfoInput struct {
 	Email string `json:"email"`
 }

@@ -7,6 +7,7 @@ import (
 	"net/http"
 )
 
+// UpdateReceiveInput represents the parsed data from request body get update receivers
 type UpdateReceiveInput struct {
 	Sender string `json:"sender"`
 	Text   string `json:"text"`
