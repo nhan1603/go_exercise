@@ -42,5 +42,5 @@ func (i impl) Block(ctx context.Context, emailId1, emailId2 int) error {
 
 	errInsert := relaBlock.Insert(ctx, i.dbConn, boil.Infer())
 
-	return utils.MergeErrDB(errInsert, errDelete)
+	return errors.WithStack(utils.MergeErrDB(errInsert, errDelete))
 }

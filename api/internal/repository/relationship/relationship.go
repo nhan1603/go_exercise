@@ -47,5 +47,5 @@ func (i impl) AddFriend(ctx context.Context, emailId1, emailId2 int) error {
 	errInsert := relaFriend1.Insert(ctx, i.dbConn, boil.Infer())
 	errInsert2 := relaFriend2.Insert(ctx, i.dbConn, boil.Infer())
 
-	return utils.MergeErrDB(errInsert, errInsert2)
+	return pkgerrors.WithStack(utils.MergeErrDB(errInsert, errInsert2))
 }

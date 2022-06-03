@@ -26,7 +26,7 @@ func (i impl) FindFriendList(ctx context.Context, usrId int) ([]string, error) {
 		if errors.Cause(errs) == sql.ErrNoRows {
 			return result, nil
 		}
-		return nil, errors.Wrap(errs, "orm: unable to select from user and relationship")
+		return nil, errors.WithStack(errs)
 	}
 	defer rows.Close()
 
@@ -35,7 +35,7 @@ func (i impl) FindFriendList(ctx context.Context, usrId int) ([]string, error) {
 	for rows.Next() {
 		err := rows.Scan(&frEmail)
 		if err != nil {
-			return nil, errors.Wrap(err, "orm: unable to select from user and relationship")
+			return nil, errors.WithStack(err)
 		}
 		result = append(result, frEmail)
 	}
