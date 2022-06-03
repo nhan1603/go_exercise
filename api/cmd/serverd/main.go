@@ -14,7 +14,6 @@ import (
 	"gobase/api/cmd/banner"
 	"gobase/api/cmd/serverd/router"
 	"gobase/api/internal/repository"
-	"gobase/api/internal/repository/generator"
 	"gobase/api/pkg/app"
 	"gobase/api/pkg/db/pg"
 	"gobase/api/pkg/env"
@@ -76,10 +75,6 @@ func run(ctx context.Context) error {
 func initRouter(
 	ctx context.Context,
 	dbConn pg.BeginnerExecutor) (router.Router, error) {
-	if err := generator.InitSnowflakeGenerators(); err != nil {
-		return router.Router{}, err
-	}
-
 	return router.New(
 		ctx,
 		strings.Split(os.Getenv("CORS_ALLOWED_ORIGINS"), ","),
