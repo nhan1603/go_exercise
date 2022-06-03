@@ -1,7 +1,7 @@
 package relationship
 
 const (
-	FRIEND    int = 0
-	SUBSCRIBE int = 1
-	BLOCK     int = 2
+	RelationshipTypeFriend   string = "FRIEND"
+	RelationshipTypeSubcribe string = "SUBSCRIBE"
+	RelationshipTypeBlock    string = "BLOCK"
 )

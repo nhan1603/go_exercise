@@ -26,7 +26,7 @@ func (i impl) UpdateReceiver(ctx context.Context, emailId int, emailList []strin
 
 	var result []string
 
-	rows, errs := i.dbConn.Query(query, emailId, BLOCK, pq.Array(emailList), emailId, BLOCK)
+	rows, errs := i.dbConn.Query(query, emailId, RelationshipTypeBlock, pq.Array(emailList), emailId, RelationshipTypeBlock)
 
 	if errs != nil {
 		if errors.Cause(errs) == sql.ErrNoRows {

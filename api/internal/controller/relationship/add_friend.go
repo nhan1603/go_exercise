@@ -2,8 +2,6 @@ package relationship
 
 import (
 	"context"
-
-	pkgerrors "github.com/pkg/errors"
 	"gobase/api/internal/model"
 )
 
@@ -20,8 +18,8 @@ func (i impl) AddFriend(ctx context.Context, input model.MakeRelationship) error
 	}
 
 	if err := i.repo.Relationship().CheckExistedFriend(ctx, user1.ID, user2.ID); err != nil {
-		return pkgerrors.WithStack(err)
+		return err
 	}
 
-	return pkgerrors.WithStack(i.repo.Relationship().AddFriend(ctx, user1.ID, user2.ID))
+	return i.repo.Relationship().AddFriend(ctx, user1.ID, user2.ID)
 }

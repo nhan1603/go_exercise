@@ -20,7 +20,7 @@ func (i impl) FindFriendList(ctx context.Context, usrId int) ([]string, error) {
 
 	var result []string
 
-	rows, errs := i.dbConn.Query(query, usrId, FRIEND)
+	rows, errs := i.dbConn.Query(query, usrId, RelationshipTypeFriend)
 
 	if errs != nil {
 		if errors.Cause(errs) == sql.ErrNoRows {

@@ -18,7 +18,7 @@ func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) er
 	_, err := orm.Relationships(qm.Expr(
 		qm.Expr(qm.Where("first_email_id=?", emailId1), qm.And("second_email_id = ?", emailId2)),
 		qm.Or2(qm.Expr(qm.Where("first_email_id=?", emailId2), qm.And("second_email_id = ?", emailId1)))),
-		qm.Expr(qm.Where("status=?", FRIEND), qm.Or("status=?", BLOCK))).One(ctx, i.dbConn)
+		qm.Expr(qm.Where("status=?", RelationshipTypeFriend), qm.Or("status=?", RelationshipTypeBlock))).One(ctx, i.dbConn)
 
 	if err != nil {
 		if errors.Cause(err) == sql.ErrNoRows {
@@ -27,7 +27,7 @@ func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) er
 		return pkgerrors.WithStack(err)
 	}
 
-	return errors.New("Cannot create new friendship.")
+	return pkgerrors.WithStack(errors.New("Cannot create new friendship."))
 }
 
 // AddFriend will create a relationship entity for two email
@@ -35,13 +35,13 @@ func (i impl) AddFriend(ctx context.Context, emailId1, emailId2 int) error {
 	relaFriend1 := orm.Relationship{
 		FirstEmailID:  emailId1,
 		SecondEmailID: emailId2,
-		Status:        FRIEND,
+		Status:        RelationshipTypeFriend,
 	}
 
 	relaFriend2 := orm.Relationship{
 		FirstEmailID:  emailId2,
 		SecondEmailID: emailId1,
-		Status:        FRIEND,
+		Status:        RelationshipTypeFriend,
 	}
 
 	errInsert := relaFriend1.Insert(ctx, i.dbConn, boil.Infer())

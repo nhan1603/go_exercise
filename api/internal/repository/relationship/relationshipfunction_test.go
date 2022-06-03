@@ -56,7 +56,7 @@ func TestImpl_CheckExistedFriend(t *testing.T) {
 					o := orm.Relationship{
 						FirstEmailID:  user1.ID,
 						SecondEmailID: user2.ID,
-						Status:        FRIEND,
+						Status:        RelationshipTypeFriend,
 					}
 					require.NoError(t, o.Insert(context.Background(), dbConn, boil.Infer()))
 				}

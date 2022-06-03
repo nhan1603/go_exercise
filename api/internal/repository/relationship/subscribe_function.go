@@ -14,7 +14,7 @@ import (
 // CheckExistedSubscribe will check that the first email has already subscribed the second one or not
 func (i impl) CheckExistedSubscribe(ctx context.Context, emailId1, emailId2 int) error {
 	_, err := orm.Relationships(qm.Where("first_email_id=?", emailId1), qm.Where("second_email_id = ?", emailId2),
-		qm.Expr(qm.Where("status = ?", SUBSCRIBE), qm.Or("status = ?", BLOCK))).One(ctx, i.dbConn)
+		qm.Expr(qm.Where("status = ?", RelationshipTypeSubcribe), qm.Or("status = ?", RelationshipTypeBlock))).One(ctx, i.dbConn)
 
 	if err != nil {
 		if errors.Cause(err) == sql.ErrNoRows {
@@ -31,7 +31,7 @@ func (i impl) Subscribe(ctx context.Context, email1, email2 int) error {
 	relaSubscribe := orm.Relationship{
 		FirstEmailID:  email1,
 		SecondEmailID: email2,
-		Status:        SUBSCRIBE,
+		Status:        RelationshipTypeSubcribe,
 	}
 
 	return pkgerrors.WithStack(relaSubscribe.Insert(ctx, i.dbConn, boil.Infer()))

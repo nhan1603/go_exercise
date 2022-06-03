@@ -24,6 +24,10 @@ func TestImpl_CreateUser(t *testing.T) {
 		"success": {
 			email: "nhan.tran3@test.com",
 		},
+		"failed": {
+			email:  "",
+			expErr: errors.New("orm: unable to insert into user: pq: new row for relation \"user\" violates check constraint \"user_email_check\""),
+		},
 	}
 
 	for s, tc := range tcs {
@@ -42,7 +46,7 @@ func TestImpl_CreateUser(t *testing.T) {
 				if tc.expErr == nil {
 					require.NoError(t, err)
 				} else {
-					require.Equal(t, tc.expErr, err)
+					require.Equal(t, tc.expErr.Error(), err.Error())
 				}
 			})
 		})

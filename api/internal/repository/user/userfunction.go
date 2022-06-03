@@ -15,7 +15,7 @@ func (i impl) FindUserByEmail(ctx context.Context, email string) (orm.User, erro
 	u, err := orm.Users(orm.UserWhere.Email.EQ(email)).One(ctx, i.dbConn)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return orm.User{}, errors.New("not found")
+			return orm.User{}, ErrNotFound
 		}
 
 		return orm.User{}, pkgerrors.WithStack(err)
