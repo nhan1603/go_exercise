@@ -29,8 +29,8 @@ func (h ApiHandler) CreateUser() http.HandlerFunc {
 		_, errCreate := h.userCtrl.CreateUser(r.Context(), req.Email)
 
 		if errCreate != nil {
-			if errCreate.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errCreate.Error()}
+			if errCreate.Error() == "Existed email input." {
+				return &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_email", Desc: errCreate.Error()}
 			}
 			return errCreate
 

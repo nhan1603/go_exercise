@@ -40,10 +40,10 @@ func TestApiHandler_CreateUser(t *testing.T) {
 			errDb:     errors.New("cannot create user"),
 		},
 		"failFromDBInvalidUser": {
-			expStatus: http.StatusNotFound,
-			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			expStatus: http.StatusBadRequest,
+			expErr:    &httpserv.Error{Status: http.StatusBadRequest, Code: "invalid_email", Desc: "Existed email input."},
 			body:      []byte(`{"email":"andy@example.com"}`),
-			errDb:     errors.New("not found"),
+			errDb:     errors.New("Existed email input."),
 		},
 		"success": {
 			expStatus: http.StatusOK,

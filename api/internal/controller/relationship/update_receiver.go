@@ -8,7 +8,6 @@ import (
 
 // UpdateReceiver returns a list of emails that will receive message from certain user
 func (i impl) UpdateReceiver(ctx context.Context, input model.UpdateInfo) ([]string, error) {
-
 	user, err := i.repo.User().FindUserByEmail(ctx, input.Sender)
 	if err != nil {
 		return nil, err
