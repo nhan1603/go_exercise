@@ -11,12 +11,12 @@ import (
 
 // FindFriendList will return a list of friends of an email address
 func (i impl) FindFriendList(ctx context.Context, email string) ([]string, error) {
-	user1, err1 := i.repo.User().FindUserByEmail(ctx, email)
-	if err1 != nil {
-		return nil, err1
+	user, err := i.repo.User().FindUserByEmail(ctx, email)
+	if err != nil {
+		return nil, err
 	}
 
-	usrId := user1.ID
+	usrId := user.ID
 
 	return i.repo.Relationship().FindFriendList(ctx, usrId)
 }

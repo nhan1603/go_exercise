@@ -19,30 +19,29 @@ func (h ApiHandler) UpdateReceiver() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		var req UpdateReceiveInput
 
-		err := decoder.Decode(&req)
-		if err != nil {
+		if err := decoder.Decode(&req); err != nil {
 			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
 		}
 
-		if err = req.validate(); err != nil {
+		if err := req.validate(); err != nil {
 			return err
 		}
 
-		listReceiver, errFind := h.relaCtrl.UpdateReceiver(r.Context(), model.UpdateInfo{Sender: req.Sender, Message: req.Text})
+		listReceiver, err := h.relaCtrl.UpdateReceiver(r.Context(), model.UpdateInfo{Sender: req.Sender, Message: req.Text})
 
-		if errFind == nil {
+		if err == nil {
 			httpserv.RespondJSON(r.Context(), w, httpserv.UpdateReceiveResponse{
 				Success:    true,
 				Recipients: listReceiver,
 			})
 		} else {
-			if errFind.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errFind.Error()}
+			if err.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
 			}
-			return errFind
+			return err
 		}
 
-		return errFind
+		return err
 	})
 }
 

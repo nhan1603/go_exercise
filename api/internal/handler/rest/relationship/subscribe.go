@@ -19,16 +19,15 @@ func (h ApiHandler) Subscribe() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		var req SubscribeInput
 
-		err := decoder.Decode(&req)
-		if err != nil {
+		if err := decoder.Decode(&req); err != nil {
 			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
 		}
 
-		if err = req.validate(); err != nil {
+		if err := req.validate(); err != nil {
 			return err
 		}
 
-		if err = h.relaCtrl.Subscribe(r.Context(), model.MakeRelationship{FromFriend: req.Requestor, ToFriend: req.Target}); err != nil {
+		if err := h.relaCtrl.Subscribe(r.Context(), model.MakeRelationship{FromFriend: req.Requestor, ToFriend: req.Target}); err != nil {
 			if err.Error() == "not found" {
 				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
 			}

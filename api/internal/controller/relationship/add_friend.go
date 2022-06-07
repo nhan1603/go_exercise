@@ -5,7 +5,7 @@ import (
 	"gobase/api/internal/model"
 )
 
-// AddFriend will create a friendship for two email
+// AddFriend creates a friendship for two email
 func (i impl) AddFriend(ctx context.Context, input model.MakeRelationship) error {
 	user1, err := i.repo.User().FindUserByEmail(ctx, input.FromFriend)
 	if err != nil {

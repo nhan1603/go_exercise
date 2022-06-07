@@ -13,31 +13,27 @@ func (h ApiHandler) Block() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		var req SubscribeInput
 
-		err := decoder.Decode(&req)
-		if err != nil {
+		if err := decoder.Decode(&req); err != nil {
 			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
 		}
 
-		if err = req.validate(); err != nil {
+		if err := req.validate(); err != nil {
 			return err
 		}
 
-		errBlock := h.relaCtrl.Block(r.Context(), model.MakeRelationship{
+		err := h.relaCtrl.Block(r.Context(), model.MakeRelationship{
 			FromFriend: req.Requestor,
 			ToFriend:   req.Target,
 		})
 
-		if errBlock != nil {
-			if errBlock.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errBlock.Error()}
+		if err != nil {
+			if err.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
 			}
-			return errBlock
+			return err
 		}
 
-		if errBlock == nil {
-			httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
-		}
-
-		return errBlock
+		httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
+		return nil
 	})
 }

@@ -18,32 +18,27 @@ func (h ApiHandler) AddFriend() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		var req MakeFriendInput
 
-		err := decoder.Decode(&req)
-		if err != nil {
+		if err := decoder.Decode(&req); err != nil {
 			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
 		}
 
-		if err = req.validate(); err != nil {
+		if err := req.validate(); err != nil {
 			return err
 		}
 
-		errAdd := h.relaCtrl.AddFriend(r.Context(), model.MakeRelationship{
+		if err := h.relaCtrl.AddFriend(r.Context(), model.MakeRelationship{
 			FromFriend: req.Friends[0],
 			ToFriend:   req.Friends[1],
-		})
-
-		if errAdd != nil {
-			if errAdd.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errAdd.Error()}
+		}); err != nil {
+			if err.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
 			}
-			return errAdd
+			return err
 		}
 
-		if errAdd == nil {
-			httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
-		}
+		httpserv.RespondJSON(r.Context(), w, httpserv.Response{Success: true})
 
-		return errAdd
+		return nil
 	})
 }
 

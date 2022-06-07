@@ -1,5 +1,7 @@
 # Relationship
 
+### Friend Management Project
+
 Contains all the REST handlers that process the requests related to the relationship between users and return the corresponding responses.
 
 The possible relationships between users that can be created are as below:

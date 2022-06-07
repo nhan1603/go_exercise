@@ -14,31 +14,29 @@ func (h ApiHandler) FindFriendList() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		var req user.UserInfoInput
 
-		err := decoder.Decode(&req)
-		if err != nil {
+		if err := decoder.Decode(&req); err != nil {
 			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
 		}
 
-		if err = req.Validate(); err != nil {
+		if err := req.Validate(); err != nil {
 			return err
 		}
 
-		listFriend, errFind := h.relaCtrl.FindFriendList(r.Context(), req.Email)
+		listFriend, err := h.relaCtrl.FindFriendList(r.Context(), req.Email)
 
-		if errFind == nil {
+		if err == nil {
 			httpserv.RespondJSON(r.Context(), w, httpserv.FriendListResponse{
 				Success: true,
 				Friends: listFriend,
 				Count:   len(listFriend),
 			})
 		} else {
-			if errFind.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errFind.Error()}
+			if err.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
 			}
-			return errFind
 		}
 
-		return errFind
+		return err
 	})
 }
 
@@ -48,36 +46,33 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 		decoder := json.NewDecoder(r.Body)
 		var req MakeFriendInput
 
-		err := decoder.Decode(&req)
-		if err != nil {
+		if err := decoder.Decode(&req); err != nil {
 			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
 		}
 
-		if err = req.validate(); err != nil {
+		if err := req.validate(); err != nil {
 			return err
 		}
 
-		commonFriend, errFind := h.relaCtrl.FindCommonFriends(r.Context(),
+		commonFriend, err := h.relaCtrl.FindCommonFriends(r.Context(),
 			model.CommonFriend{
 				FirstUser:  req.Friends[0],
 				SecondUser: req.Friends[1],
 			})
 
-		if errFind != nil {
-			if errFind.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: errFind.Error()}
+		if err != nil {
+			if err.Error() == "not found" {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
 			}
-			return errFind
+			return err
 		}
 
-		if errFind == nil {
-			httpserv.RespondJSON(r.Context(), w, httpserv.FriendListResponse{
-				Success: true,
-				Friends: commonFriend,
-				Count:   len(commonFriend),
-			})
-		}
+		httpserv.RespondJSON(r.Context(), w, httpserv.FriendListResponse{
+			Success: true,
+			Friends: commonFriend,
+			Count:   len(commonFriend),
+		})
 
-		return errFind
+		return nil
 	})
 }
