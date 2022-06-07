@@ -20,19 +20,19 @@ func Handler(
 		middleware.Recoverer,    // recover from panics without crashing server
 	)
 
-	r.Post("/_/add-friend", addFriend)
+	r.Post("/api/add-friend", addFriend)
 
-	r.Post("/_/create-user", createUser)
+	r.Post("/api/create-user", createUser)
 
-	r.Post("/_/friend-list", getFriendList)
+	r.Post("/api/friend-list", getFriendList)
 
-	r.Post("/_/common-friend", getCommonFriend)
+	r.Post("/api/common-friend", getCommonFriend)
 
-	r.Post("/_/subscribe", subscribe)
+	r.Post("/api/subscribe", subscribe)
 
-	r.Post("/_/block", block)
+	r.Post("/api/block", block)
 
-	r.Post("/_/update-receiver", updateReceiver)
+	r.Post("/api/update-receiver", updateReceiver)
 
 	return r
 }

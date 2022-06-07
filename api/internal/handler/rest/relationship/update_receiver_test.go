@@ -61,7 +61,7 @@ func TestApiHandler_UpdateReceiver(t *testing.T) {
 
 	for name, tc := range tcs {
 		t.Run(name, func(t *testing.T) {
-			r := httptest.NewRequest(http.MethodPost, "/_/update-receiver", bytes.NewReader(tc.body))
+			r := httptest.NewRequest(http.MethodPost, "/api/update-receiver", bytes.NewReader(tc.body))
 			w := httptest.NewRecorder()
 
 			mockRelaCtrl := relationship.MockApiRestController{}

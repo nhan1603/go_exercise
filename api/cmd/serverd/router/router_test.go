@@ -21,13 +21,13 @@ func TestRouter_Handler(t *testing.T) {
 	)
 
 	expectedRoutes := []string{
-		"POST /_/add-friend",
-		"POST /_/block",
-		"POST /_/common-friend",
-		"POST /_/create-user",
-		"POST /_/friend-list",
-		"POST /_/subscribe",
-		"POST /_/update-receiver",
+		"POST /api/add-friend",
+		"POST /api/block",
+		"POST /api/common-friend",
+		"POST /api/create-user",
+		"POST /api/friend-list",
+		"POST /api/subscribe",
+		"POST /api/update-receiver",
 	}
 	sort.Strings(expectedRoutes)
 	var routesFound []string

@@ -61,7 +61,7 @@ func TestApiHandler_Block(t *testing.T) {
 
 	for name, tc := range tcs {
 		t.Run(name, func(t *testing.T) {
-			r := httptest.NewRequest(http.MethodPost, "/_/block", bytes.NewReader(tc.body))
+			r := httptest.NewRequest(http.MethodPost, "/api/block", bytes.NewReader(tc.body))
 			w := httptest.NewRecorder()
 
 			mockRelaCtrl := relationship.MockApiRestController{}
