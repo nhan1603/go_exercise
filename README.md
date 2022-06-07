@@ -13,7 +13,7 @@ The provided operations include simple actions such as create, delete or view on
 
 ## 2. List of APIs
 ```
-POST /api/create_user
+POST /api/create-user
 
 POST /api/add-friend
 
