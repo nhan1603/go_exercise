@@ -45,7 +45,7 @@ func TestApiHandler_FindFriendList(t *testing.T) {
 		},
 		"failFromDBInvalidUser": {
 			expStatus: http.StatusNotFound,
-			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "Provided email does not exist"},
 			body:      []byte(`{"email":"andy@example.com"}`),
 			errDb:     errors.New("not found"),
 		},
@@ -129,7 +129,7 @@ func TestApiHandler_FindCommonFriend(t *testing.T) {
 		},
 		"failFromDBInvalidUser": {
 			expStatus: http.StatusNotFound,
-			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "Provided email does not exist"},
 			body:      []byte(`{"friends":["andy@example.com","john@example.com"]}`),
 			errDb:     errors.New("not found"),
 			resultDb:  []string{},

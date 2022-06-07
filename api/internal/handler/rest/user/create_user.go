@@ -18,7 +18,7 @@ func (h ApiHandler) CreateUser() http.HandlerFunc {
 		var req UserInfoInput
 
 		if err := decoder.Decode(&req); err != nil {
-			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: ErrRequestBodyCode, Desc: ErrRequestBodyDesc}
 		}
 
 		if err := req.Validate(); err != nil {

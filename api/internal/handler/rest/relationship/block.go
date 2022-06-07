@@ -14,21 +14,19 @@ func (h ApiHandler) Block() http.HandlerFunc {
 		var req SubscribeInput
 
 		if err := decoder.Decode(&req); err != nil {
-			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: ErrRequestBodyCode, Desc: ErrRequestBodyDesc}
 		}
 
 		if err := req.validate(); err != nil {
 			return err
 		}
 
-		err := h.relaCtrl.Block(r.Context(), model.MakeRelationship{
+		if err := h.relaCtrl.Block(r.Context(), model.MakeRelationship{
 			FromFriend: req.Requestor,
 			ToFriend:   req.Target,
-		})
-
-		if err != nil {
-			if err.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
+		}); err != nil {
+			if err.Error() == ErrNotFound {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: ErrNotFoundDesc}
 			}
 			return err
 		}

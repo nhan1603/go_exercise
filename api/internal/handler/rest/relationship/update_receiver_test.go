@@ -45,7 +45,7 @@ func TestApiHandler_UpdateReceiver(t *testing.T) {
 		},
 		"failFromDBInvalidUser": {
 			expStatus: http.StatusNotFound,
-			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "not found"},
+			expErr:    &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: "Provided email does not exist"},
 			body:      []byte(`{"sender":"andy@example.com","text":"john@example.com"}`),
 			errDb:     errors.New("not found"),
 			resultDb:  []string{},

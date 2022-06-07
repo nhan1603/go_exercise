@@ -15,7 +15,7 @@ func (h ApiHandler) FindFriendList() http.HandlerFunc {
 		var req user.UserInfoInput
 
 		if err := decoder.Decode(&req); err != nil {
-			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: ErrRequestBodyCode, Desc: ErrRequestBodyDesc}
 		}
 
 		if err := req.Validate(); err != nil {
@@ -31,8 +31,8 @@ func (h ApiHandler) FindFriendList() http.HandlerFunc {
 				Count:   len(listFriend),
 			})
 		} else {
-			if err.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
+			if err.Error() == ErrNotFound {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: ErrNotFoundDesc}
 			}
 		}
 
@@ -47,7 +47,7 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 		var req MakeFriendInput
 
 		if err := decoder.Decode(&req); err != nil {
-			return &httpserv.Error{Status: http.StatusBadRequest, Code: "request_body_error", Desc: "Invalid request body"}
+			return &httpserv.Error{Status: http.StatusBadRequest, Code: ErrRequestBodyCode, Desc: ErrRequestBodyDesc}
 		}
 
 		if err := req.validate(); err != nil {
@@ -61,8 +61,8 @@ func (h ApiHandler) FindCommonFriend() http.HandlerFunc {
 			})
 
 		if err != nil {
-			if err.Error() == "not found" {
-				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: err.Error()}
+			if err.Error() == ErrNotFound {
+				return &httpserv.Error{Status: http.StatusNotFound, Code: "invalid_email", Desc: ErrNotFoundDesc}
 			}
 			return err
 		}
