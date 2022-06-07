@@ -18,6 +18,7 @@ func TestNew(t *testing.T) {
 	// Then:
 	require.Equal(t, ctx, r.ctx)
 	require.Equal(t, corsOrigin, r.corsOrigins)
-	require.NotNil(t, r.healthRESTHandler)
+	require.NotNil(t, r.relaRESTHandler)
+	require.NotNil(t, r.userRESTHandler)
 	require.True(t, r.isGQLIntrospectionOn)
 }

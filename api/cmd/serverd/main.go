@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"gobase/api/internal/controller/relationship"
+	"gobase/api/internal/controller/user"
 	"log"
 	"os"
 	"strconv"
@@ -11,10 +13,7 @@ import (
 	"github.com/friendsofgo/errors"
 	"gobase/api/cmd/banner"
 	"gobase/api/cmd/serverd/router"
-	"gobase/api/internal/controller/products"
-	"gobase/api/internal/controller/system"
 	"gobase/api/internal/repository"
-	"gobase/api/internal/repository/generator"
 	"gobase/api/pkg/app"
 	"gobase/api/pkg/db/pg"
 	"gobase/api/pkg/env"
@@ -76,15 +75,11 @@ func run(ctx context.Context) error {
 func initRouter(
 	ctx context.Context,
 	dbConn pg.BeginnerExecutor) (router.Router, error) {
-	if err := generator.InitSnowflakeGenerators(); err != nil {
-		return router.Router{}, err
-	}
-
 	return router.New(
 		ctx,
 		strings.Split(os.Getenv("CORS_ALLOWED_ORIGINS"), ","),
 		os.Getenv("GQL_INTROSPECTION_ENABLED") == "true",
-		system.New(repository.New(dbConn)),
-		products.New(repository.New(dbConn)),
+		user.New(repository.New(dbConn)),
+		relationship.New(repository.New(dbConn)),
 	), nil
 }

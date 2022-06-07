@@ -21,17 +21,13 @@ func TestRouter_Handler(t *testing.T) {
 	)
 
 	expectedRoutes := []string{
-		"GET /_/live", "GET /_/ready",
-
-		"CONNECT /gateway/public/graphql",
-		"DELETE /gateway/public/graphql",
-		"OPTIONS /gateway/public/graphql",
-		"GET /gateway/public/graphql",
-		"HEAD /gateway/public/graphql",
-		"PATCH /gateway/public/graphql",
-		"POST /gateway/public/graphql",
-		"PUT /gateway/public/graphql",
-		"TRACE /gateway/public/graphql",
+		"POST /api/add-friend",
+		"POST /api/block",
+		"POST /api/common-friend",
+		"POST /api/create-user",
+		"POST /api/friend-list",
+		"POST /api/subscribe",
+		"POST /api/update-receiver",
 	}
 	sort.Strings(expectedRoutes)
 	var routesFound []string

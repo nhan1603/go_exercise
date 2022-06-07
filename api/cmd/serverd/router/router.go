@@ -2,13 +2,10 @@ package router
 
 import (
 	"context"
-	"gobase/api/internal/controller/products"
-	"gobase/api/internal/handler/gql/public"
-	"gobase/api/pkg/httpserv/gql"
+	"gobase/api/internal/handler/rest/relationship"
+	"gobase/api/internal/handler/rest/user"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
-	"gobase/api/internal/handler/rest/health"
 	"gobase/api/pkg/httpserv"
 )
 
@@ -17,26 +14,19 @@ type Router struct {
 	ctx                  context.Context
 	corsOrigins          []string
 	isGQLIntrospectionOn bool
-	healthRESTHandler    health.Handler
-	productCtrl          products.Controller
+	userRESTHandler      user.ApiHandler
+	relaRESTHandler      relationship.ApiHandler
 }
 
 // Handler returns the Handler for use by the server
 func (rtr Router) Handler() http.Handler {
 	return httpserv.Handler(
-		rtr.healthRESTHandler.CheckReadiness(),
-		rtr.healthRESTHandler.Liveness(),
-		rtr.routes)
-}
-
-func (rtr Router) routes(r chi.Router) {
-	r.Group(rtr.public)
-}
-
-func (rtr Router) public(r chi.Router) {
-	const prefix = "/gateway/public"
-
-	r.Handle(prefix+"/graphql", gql.Handler(public.NewSchema(
-		rtr.productCtrl),
-		rtr.isGQLIntrospectionOn))
+		rtr.relaRESTHandler.AddFriend(),
+		rtr.userRESTHandler.CreateUser(),
+		rtr.relaRESTHandler.FindFriendList(),
+		rtr.relaRESTHandler.FindCommonFriend(),
+		rtr.relaRESTHandler.Subscribe(),
+		rtr.relaRESTHandler.Block(),
+		rtr.relaRESTHandler.UpdateReceiver(),
+	)
 }
