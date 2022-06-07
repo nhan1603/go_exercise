@@ -35,7 +35,7 @@ func TestApiHandler_CreateUser(t *testing.T) {
 		},
 		"failFromDB": {
 			expStatus: http.StatusInternalServerError,
-			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "Something went wrong"},
+			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "cannot create user"},
 			body:      []byte(`{"email":"andy@example.com"}`),
 			errDb:     errors.New("cannot create user"),
 		},
