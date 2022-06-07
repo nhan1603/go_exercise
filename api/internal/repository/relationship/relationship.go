@@ -14,7 +14,6 @@ import (
 
 // CheckExistedFriend will check a relationship between two emails has already existed or not
 func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) error {
-
 	_, err := orm.Relationships(qm.Expr(
 		qm.Expr(qm.Where("first_email_id=?", emailId1), qm.And("second_email_id = ?", emailId2)),
 		qm.Or2(qm.Expr(qm.Where("first_email_id=?", emailId2), qm.And("second_email_id = ?", emailId1)))),
@@ -27,7 +26,7 @@ func (i impl) CheckExistedFriend(ctx context.Context, emailId1, emailId2 int) er
 		return pkgerrors.WithStack(err)
 	}
 
-	return pkgerrors.WithStack(errors.New("Cannot create new friendship."))
+	return pkgerrors.WithStack(errors.New("Cannot create new friendship. Users have already been friends."))
 }
 
 // AddFriend will create a relationship entity for two email

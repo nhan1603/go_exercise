@@ -69,7 +69,7 @@ func TestImpl_CheckExistedSubscribe(t *testing.T) {
 			existed: false,
 		},
 		"existed_subscribe": {
-			expErr:  errors.New("Cannot create new subscription."),
+			expErr:  errors.New("Cannot create new subscription. User has already been subscribed."),
 			email1:  "nhan.tran3@test.com",
 			email2:  "nhan.tran4@test.com",
 			existed: true,

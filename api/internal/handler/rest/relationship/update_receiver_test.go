@@ -38,7 +38,7 @@ func TestApiHandler_UpdateReceiver(t *testing.T) {
 		},
 		"failFromDB": {
 			expStatus: http.StatusInternalServerError,
-			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "Something went wrong"},
+			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "cannot find user"},
 			body:      []byte(`{"sender":"andy@example.com","text":"john@example.com"}`),
 			errDb:     errors.New("cannot find user"),
 			resultDb:  []string{},

@@ -33,7 +33,7 @@ func TestImpl_CheckExistedFriend(t *testing.T) {
 		},
 		"existed_email": {
 			givenCtx: context.Background(),
-			expErr:   errors.New("Cannot create new friendship."),
+			expErr:   errors.New("Cannot create new friendship. Users have already been friends."),
 			email1:   "nhan.tran3@test.com",
 			email2:   "nhan.tran4@test.com",
 			existed:  true,

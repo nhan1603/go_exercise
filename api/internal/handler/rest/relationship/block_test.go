@@ -41,7 +41,7 @@ func TestApiHandler_Block(t *testing.T) {
 		},
 		"failFromDB": {
 			expStatus: http.StatusInternalServerError,
-			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "Something went wrong"},
+			expErr:    &httpserv.Error{Status: http.StatusInternalServerError, Code: "internal_error", Desc: "cannot block user"},
 			body:      []byte(`{"requestor":"andy@example.com","target":"john@example.com"}`),
 			errDb:     errors.New("cannot block user"),
 		},

@@ -69,7 +69,7 @@ func TestImpl_CheckExistedBlock(t *testing.T) {
 			existed: false,
 		},
 		"existed_block": {
-			expErr:  errors.New("Cannot block user."),
+			expErr:  errors.New("Cannot block user. User has already been blocked."),
 			email1:  "nhan.tran3@test.com",
 			email2:  "nhan.tran4@test.com",
 			existed: true,

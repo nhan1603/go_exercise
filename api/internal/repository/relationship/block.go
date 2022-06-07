@@ -23,7 +23,7 @@ func (i impl) CheckExistedBlock(ctx context.Context, emailId1, emailId2 int) err
 		return pkgerrors.WithStack(err)
 	}
 
-	return errors.New("Cannot block user.")
+	return errors.New("Cannot block user. User has already been blocked.")
 }
 
 // Block creates a block-relationship from the first email

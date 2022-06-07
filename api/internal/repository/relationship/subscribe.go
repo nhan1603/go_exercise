@@ -23,7 +23,7 @@ func (i impl) CheckExistedSubscribe(ctx context.Context, emailId1, emailId2 int)
 		return pkgerrors.WithStack(err)
 	}
 
-	return errors.New("Cannot create new subscription.")
+	return errors.New("Cannot create new subscription. User has already been subscribed.")
 }
 
 // Subscribe will create a subscription for two email

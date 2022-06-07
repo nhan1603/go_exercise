@@ -57,7 +57,11 @@ func RespondJSONWithHeaders(ctx context.Context, w http.ResponseWriter, obj inte
 	case error:
 		fmt.Println(obj)
 		status = http.StatusInternalServerError
-		respBytes, err = json.Marshal(ErrDefaultInternal)
+		respBytes, err = json.Marshal(&Error{
+			Status: http.StatusInternalServerError,
+			Code:   DefaultErrorCode,
+			Desc:   obj.(error).Error(),
+		})
 	default:
 		respBytes, err = json.Marshal(obj)
 	}
